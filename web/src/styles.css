@@ -3652,6 +3652,8 @@
 
 .field-screen .board {
   display: grid !important;
+  box-sizing: border-box !important;
+  padding-top: 2.5rem !important;
 }
 
 .field-screen .cell {
