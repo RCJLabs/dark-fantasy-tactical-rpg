@@ -26,7 +26,8 @@ public class GridManager : MonoBehaviour
                 tileObj.name = $"Tile_{x}_{y}";
 
                 Tile tile = tileObj.GetComponent<Tile>();
-                if (tile == null) tile = tileObj.AddComponent<Tile>();
+                if (tile == null)
+                    tile = tileObj.AddComponent<Tile>();
 
                 tile.gridPosition = new Vector2Int(x, y);
                 tiles[tile.gridPosition] = tile;
@@ -43,7 +44,8 @@ public class GridManager : MonoBehaviour
     public List<Tile> GetNeighbors(Vector2Int pos)
     {
         List<Tile> neighbors = new List<Tile>();
-        Vector2Int[] directions = {
+        Vector2Int[] directions =
+        {
             new Vector2Int(1, 0), new Vector2Int(-1, 0),
             new Vector2Int(0, 1), new Vector2Int(0, -1)
         };

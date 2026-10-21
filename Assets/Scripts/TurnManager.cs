@@ -10,20 +10,22 @@ public class TurnManager : MonoBehaviour
 
     void Start()
     {
-        // Auto-find units in scene for prototype
         units.AddRange(FindObjectsOfType<Unit>());
         StartTurn();
     }
 
     public void StartTurn()
     {
-        if (CurrentUnit == null) return;
+        if (CurrentUnit == null)
+            return;
+        CurrentUnit.BeginTurn();
         Debug.Log($"Turn started for {CurrentUnit.unitName}");
-        // Highlight movement range later
     }
 
     public void EndTurn()
     {
+        if (units.Count == 0)
+            return;
         currentUnitIndex = (currentUnitIndex + 1) % units.Count;
         StartTurn();
     }
