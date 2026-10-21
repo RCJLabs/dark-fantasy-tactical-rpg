@@ -3547,3 +3547,88 @@
   background-position: center !important;
 }
 
+/* The field is the screen. The bar, the roll, and the orders sit on top of it. */
+.game[data-screen="battle"] .chrome,
+.game[data-screen="deploy"] .chrome {
+  top: 0.22rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.deploy,
+.battle {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+}
+
+.deploy .board-wrap,
+.battle .board-wrap {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.deploy .board-frame,
+.battle .board-frame,
+.deploy .board,
+.battle .board {
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  margin: 0 !important;
+}
+
+.deploy .deploy-bar,
+.battle .field-bar {
+  position: absolute !important;
+  z-index: 8 !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  background: linear-gradient(to bottom, rgba(12, 10, 9, 0.94), rgba(12, 10, 9, 0.5) 72%, transparent);
+}
+
+.deploy .field-roster,
+.battle .field-roster {
+  position: absolute !important;
+  z-index: 8 !important;
+  top: 2.9rem;
+  bottom: 0.35rem;
+  left: 0.2rem;
+  width: 2.7rem;
+  margin: 0;
+  padding: 0;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  background: none;
+}
+
+.battle .field-hud {
+  position: absolute !important;
+  z-index: 8 !important;
+  left: 3.2rem;
+  right: 0.35rem;
+  bottom: 0.3rem;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  margin: 0;
+}
+
