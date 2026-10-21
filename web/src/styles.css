@@ -3444,3 +3444,106 @@
   outline: 2px solid #f6f0e6;
 }
 
+/* One ground. The whole grid fits the screen. Features sit on it. */
+.deploy {
+  position: relative;
+}
+
+.deploy .board-wrap {
+  position: absolute;
+  top: 2.7rem;
+  right: 0;
+  bottom: 0;
+  left: 3.25rem;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 3px;
+  overflow: hidden;
+  display: block;
+}
+
+.battle .board-wrap {
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  padding: 2px;
+}
+
+.deploy .board-frame,
+.battle .board-frame,
+.deploy .board,
+.battle .board {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  aspect-ratio: auto !important;
+}
+
+.board[data-place="toll"] { background-image: url("/art/terrain/toll.webp"); }
+.board[data-place="orchard"] { background-image: url("/art/terrain/orchard.webp"); }
+.board[data-place="chapel"] { background-image: url("/art/terrain/chapel.webp"); }
+.board[data-place="iron"] { background-image: url("/art/terrain/iron.webp"); }
+.board[data-place="naming"] { background-image: url("/art/terrain/naming.webp"); }
+
+.deploy .board,
+.battle .board {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.deploy .cell,
+.battle .cell,
+.board[data-place] .cell-open {
+  background-image: none !important;
+  background-color: transparent !important;
+  aspect-ratio: auto !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  height: auto !important;
+  outline: 1px solid rgba(24, 16, 12, 0.22);
+  outline-offset: -1px;
+}
+
+.deploy .cell-rubble,
+.battle .cell-rubble,
+.deploy .cell-thicket,
+.battle .cell-thicket,
+.deploy .cell-mire,
+.battle .cell-mire,
+.deploy .cell-wall,
+.battle .cell-wall {
+  background-repeat: no-repeat !important;
+  background-position: center 70% !important;
+  background-size: 72% auto !important;
+  background-color: transparent !important;
+}
+
+.deploy .cell-rubble,
+.battle .cell-rubble {
+  background-image: url("/art/terrain/prop-rubble.png") !important;
+}
+
+.deploy .cell-thicket,
+.battle .cell-thicket {
+  background-image: url("/art/terrain/prop-thicket.png") !important;
+  background-size: 88% auto !important;
+  background-position: center 60% !important;
+}
+
+.deploy .cell-mire,
+.battle .cell-mire {
+  background-image: url("/art/terrain/prop-mire.png") !important;
+  background-size: 84% auto !important;
+}
+
+.deploy .cell-wall,
+.battle .cell-wall {
+  background-image: url("/art/terrain/prop-wall.png") !important;
+  background-size: 92% auto !important;
+  background-position: center !important;
+}
+
