@@ -135,7 +135,7 @@ export function Game() {
   };
 
   return (
-    <main className="game">
+    <main className="game" data-screen={boot === "play" ? state.screen : boot}>
       {boot === "play" && (
         <div className="chrome">
           <button type="button" className="menu-back" onClick={() => setBoot("menu")}>

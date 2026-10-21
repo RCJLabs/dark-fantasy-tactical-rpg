@@ -2798,10 +2798,25 @@
 .battle {
   display: grid;
   grid-template-columns: 3.25rem minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: 2.7rem minmax(0, 1fr) auto;
   height: 100dvh;
   overflow: hidden;
   background: #100d0b;
+}
+
+.game[data-screen="battle"] .chrome {
+  top: 0.28rem;
+  left: calc(3.25rem + (100% - 3.25rem) / 2);
+}
+
+.game[data-screen="battle"] .menu-back,
+.game[data-screen="battle"] .mute {
+  min-height: 2.15rem;
+  height: 2.15rem;
+}
+
+.game[data-screen="battle"] .mute {
+  width: 2.15rem;
 }
 
 .battle .board-wrap {
@@ -2813,7 +2828,7 @@
   height: auto;
   min-width: 0;
   min-height: 0;
-  margin: 0 0.3rem 0.1rem 0.15rem;
+  margin: 0 0.25rem 0.1rem 0.1rem;
   padding: 0;
   display: block;
   overflow: hidden;
@@ -2831,6 +2846,7 @@
 .battle .board {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .battle .cell {
@@ -2838,11 +2854,19 @@
   min-height: 0 !important;
   min-width: 0;
   height: auto;
+  overflow: visible;
+}
+
+.battle .token {
+  overflow: visible;
 }
 
 .battle .token img {
-  width: min(4.6rem, 92%);
-  height: min(5.4rem, 150%);
+  width: 92%;
+  height: 145%;
+  bottom: 0.15rem;
+  object-fit: contain;
+  object-position: bottom center;
 }
 
 .field-bar {
@@ -2853,29 +2877,49 @@
   left: auto;
   right: auto;
   z-index: 2;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 11.5rem minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem;
-  padding: 0.4rem 0.45rem 0.15rem;
+  gap: 0.4rem;
+  height: 2.7rem;
+  padding: 0 0.45rem;
+  overflow: hidden;
   pointer-events: auto;
   background: none;
 }
 
+.field-bar > div {
+  min-width: 0;
+  overflow: hidden;
+}
+
 .field-bar .btn {
   pointer-events: auto;
+  grid-column: 3;
+  justify-self: end;
+  min-height: 0;
+  height: 2rem;
+  padding: 0 0.75rem;
 }
 
 .field-bar strong {
   display: block;
   font-family: var(--font-display);
-  font-size: 1.25rem;
-  line-height: 1;
+  font-size: 1.05rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.field-bar span {
+.field-bar > div > span {
+  display: block;
   color: var(--color-muted);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .field-roster {
@@ -2888,23 +2932,30 @@
   z-index: 2;
   width: auto;
   margin: 0;
-  padding: 0.45rem 0.2rem 0.3rem;
+  padding: 0.3rem 0.18rem 0.25rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 0.28rem;
+  gap: 0.22rem;
   min-height: 0;
   overflow: hidden;
 }
 
+.field-roster > li {
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: 3.15rem;
+  display: flex;
+}
+
 .field-roster .mini {
   position: relative;
-  flex: 0 1 3rem;
-  height: 3rem;
+  flex: 1 1 auto;
+  height: 100%;
   width: 100%;
   min-width: 0;
   min-height: 0;
-  max-height: 3rem;
+  max-height: none;
   padding: 0;
   overflow: hidden;
   display: block;
@@ -2954,9 +3005,10 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  min-height: 2.8rem;
-  margin: 0.25rem 0.35rem 0.35rem;
-  padding: 0.3rem 0.45rem;
+  min-height: 0;
+  max-height: 2.8rem;
+  margin: 0.15rem 0.3rem 0.25rem;
+  padding: 0.25rem 0.4rem;
   border: 1px solid var(--color-line);
   border-radius: 0.4rem;
   background: color-mix(in srgb, var(--color-bg) 88%, transparent);
