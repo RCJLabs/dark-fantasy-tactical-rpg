@@ -305,7 +305,7 @@ export function Battle({
   })();
 
   return (
-    <section className="battle" data-place={mission.ground ?? mission.id} style={{ ["--cols" as string]: String(w), ["--rows" as string]: String(h) }}>
+    <section className="battle field-screen" data-place={mission.ground ?? mission.id} style={{ ["--cols" as string]: String(w), ["--rows" as string]: String(h) }}>
       {!fieldOpen && <FieldLoading title={mission.name} place={mission.place} pct={fieldPct} src={loadingArt} />}
       <header className="field-bar">
         <div>

@@ -797,7 +797,7 @@ function Deploy({ state, dispatch, missionId }: { state: Campaign; dispatch: (a:
     return [`${spawn.x},${spawn.y}`, merc];
   }));
   return (
-    <section className="deploy" data-place={place} style={{ ["--cols" as string]: String(width), ["--rows" as string]: String(height) }}>
+    <section className="deploy field-screen" data-place={place} style={{ ["--cols" as string]: String(width), ["--rows" as string]: String(height) }}>
       <header className="deploy-bar">
         <div>
           <strong>{mission.name}</strong>

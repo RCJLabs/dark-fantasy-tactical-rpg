@@ -3632,3 +3632,49 @@
   margin: 0;
 }
 
+/* Full-bleed field. Nothing around it can shrink the grid. */
+.field-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 5 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #100d0b !important;
+}
+
+.field-screen .board-wrap,
+.field-screen .board-frame,
+.field-screen .board {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  aspect-ratio: auto !important;
+  transform: none !important;
+}
+
+.field-screen .board {
+  display: grid !important;
+}
+
+.field-screen .cell {
+  min-height: 0 !important;
+  min-width: 0 !important;
+  height: auto !important;
+  aspect-ratio: auto !important;
+}
+
