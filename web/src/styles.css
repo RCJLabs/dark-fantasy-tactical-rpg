@@ -1423,9 +1423,58 @@
   }
 }
 
+.token.is-stepping::after {
+  content: "";
+  position: absolute;
+  left: 28%;
+  right: 28%;
+  bottom: 3px;
+  z-index: 2;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(232, 196, 120, 0.55);
+  animation: step-puff 0.42s ease forwards;
+}
+
+@keyframes step-puff {
+  from {
+    opacity: 0.8;
+    transform: scaleX(0.4);
+  }
+  to {
+    opacity: 0;
+    transform: scaleX(1.6);
+  }
+}
+
+.token.is-downed {
+  z-index: 1;
+  transform-origin: 50% 85%;
+  animation: token-fall 0.48s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.token.is-downed.is-still {
+  animation: none;
+  transform: rotate(72deg);
+}
+
+.token.is-downed img {
+  animation: none;
+  filter: grayscale(0.7) brightness(0.5);
+}
+
 .token.is-stepping img,
 .token.is-hit img {
   animation: none;
+}
+
+@keyframes token-fall {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(72deg);
+  }
 }
 
 .token.is-hit::after {
@@ -1515,6 +1564,18 @@
   background: #100d0b;
   border-radius: 0.2rem;
   box-shadow: 0 0 0 1px currentColor;
+  animation: pip-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes pip-in {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .seal-pip b {
@@ -1638,7 +1699,7 @@
 .hp-fill {
   z-index: 1;
   background: linear-gradient(180deg, #e07870, #8e241c);
-  transition: width 0.12s linear;
+  transition: width 0.4s linear;
 }
 
 .hp-ally .hp-fill {
@@ -2036,9 +2097,16 @@
   .cell-threat,
   .ash,
   .node.is-open .seal,
+  .token.is-downed,
+  .seal-pip,
+  .token.is-stepping::after,
   .load-icon {
     animation: none;
     transition: none;
+  }
+
+  .token.is-downed {
+    transform: rotate(72deg);
   }
 }
 

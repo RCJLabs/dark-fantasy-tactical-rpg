@@ -569,6 +569,7 @@ function Token({
   const [flash, setFlash] = useState(false);
   const motionRef = useRef(motion);
   motionRef.current = motion;
+  const bornDown = useRef(unit.downed);
 
   useLayoutEffect(() => {
     const el = ref.current;
@@ -661,6 +662,7 @@ function Token({
   useLayoutEffect(() => {
     if (!hit || hit === hitSeen.current) return;
     hitSeen.current = hit;
+    if (unit.downed) return;
     setFlash(true);
     const el = ref.current;
     const img = el?.querySelector("img");
@@ -683,7 +685,6 @@ function Token({
     };
   }, [hit]);
 
-  if (unit.downed) return null;
   const cls = [
     "token",
     unit.team === "player" ? "token-ally" : "token-enemy",
@@ -693,6 +694,8 @@ function Token({
     acting ? "is-acting" : "",
     stepping ? "is-stepping" : "",
     flash ? "is-hit" : "",
+    unit.downed ? "is-downed" : "",
+    unit.downed && bornDown.current ? "is-still" : "",
     woundClass(unit.scars ?? 0, Boolean(unit.frail)),
   ]
     .filter(Boolean)
@@ -700,14 +703,15 @@ function Token({
   const bob = `${((unit.x * 7 + unit.y * 5) % 11) * 0.18}s`;
   return (
     <div ref={ref} className={cls} style={{ gridColumn: unit.x + 1, gridRow: unit.y + 1, ["--bob" as string]: bob }}>
-      {acting && <span className="acting-ring" aria-hidden />}
+      {acting && !unit.downed && <span className="acting-ring" aria-hidden />}
       <img src={asset(`/art/${unit.art}.png`)} alt={unit.name} />
-      {(selected || acting) && <em className="who">{unit.name.split(" ")[0]}</em>}
-      <ScarMarks scars={unit.scars ?? 0} frail={Boolean(unit.frail)} />
+      {(selected || acting) && !unit.downed && <em className="who">{unit.name.split(" ")[0]}</em>}
+      {!unit.downed && <ScarMarks scars={unit.scars ?? 0} frail={Boolean(unit.frail)} />}
       <HealthBar hp={unit.hp} max={unit.maxHp} team={unit.team} />
+      {!unit.downed && (
       <span className="seals">
         {unit.mark && (
-          <em className={`seal-pip pip-${unit.mark.kind}`}>
+          <em key={`${unit.mark.kind}-${unit.mark.turns}-${unit.mark.sourceId}`} className={`seal-pip pip-${unit.mark.kind}`}>
             {MARK_SHORT[unit.mark.kind]} <b>{unit.mark.turns}</b>
           </em>
         )}
@@ -721,7 +725,8 @@ function Token({
         {ground === "m" && <em className="seal-pip pip-bog">Bog</em>}
         {ground === "r" && <em className="seal-pip pip-cover">Cover</em>}
       </span>
-      {chip && <em className="aim-chip">{chip}</em>}
+      )}
+      {chip && !unit.downed && <em className="aim-chip">{chip}</em>}
     </div>
   );
 }
@@ -799,6 +804,27 @@ function HealthBar({
 }) {
   const pct = max <= 0 ? 0 : Math.max(0, Math.min(100, (hp / max) * 100));
   const low = pct > 0 && pct <= 35;
+  const [shown, setShown] = useState(hp);
+  const from = useRef(hp);
+  useEffect(() => {
+    if (inline) return;
+    const start = from.current;
+    from.current = hp;
+    if (start === hp) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(hp);
+      return;
+    }
+    const began = performance.now();
+    let frame = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - began) / 380);
+      setShown(Math.round(start + (hp - start) * t));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [hp, inline]);
   return (
     <span
       className={`hp ${team === "player" ? "hp-ally" : "hp-foe"} ${low ? "is-low" : ""} ${inline ? "hp-inline" : ""}`}
@@ -813,7 +839,7 @@ function HealthBar({
         <i className="hp-ghost" style={{ width: `${pct}%` }} />
         <i className="hp-fill" style={{ width: `${pct}%` }} />
       </span>
-      {!inline && <b>{Math.max(0, hp)}</b>}
+      {!inline && <b>{Math.max(0, shown)}</b>}
     </span>
   );
 }
