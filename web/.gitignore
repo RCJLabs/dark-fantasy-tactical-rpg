@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-pages
+.output
+.vercel
+.grok
+.tanstack
+artifacts
+attachments
+screenshots
