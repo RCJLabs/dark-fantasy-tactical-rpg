@@ -2792,7 +2792,7 @@
 
 .battle {
   display: grid;
-  grid-template-columns: 4.4rem minmax(0, 1fr);
+  grid-template-columns: 3.25rem minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr) auto;
   height: 100dvh;
   overflow: hidden;
@@ -2804,27 +2804,21 @@
   grid-column: 2;
   grid-row: 2;
   inset: auto;
-  top: auto;
-  left: auto;
-  right: auto;
-  bottom: auto;
   width: auto;
   height: auto;
   min-width: 0;
   min-height: 0;
-  margin: 0.15rem 0.35rem;
+  margin: 0 0.3rem 0.1rem 0.15rem;
   padding: 0;
-  display: grid;
-  place-items: center;
+  display: block;
   overflow: hidden;
-  container-type: size;
 }
 
 .battle .board-frame {
-  width: min(100cqw, calc(100cqh * var(--cols) / var(--rows)));
-  height: min(100cqh, calc(100cqw * var(--rows) / var(--cols)));
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
   aspect-ratio: auto;
   margin: 0;
 }
@@ -2839,6 +2833,11 @@
   min-height: 0 !important;
   min-width: 0;
   height: auto;
+}
+
+.battle .token img {
+  width: min(4.6rem, 92%);
+  height: min(5.4rem, 150%);
 }
 
 .field-bar {
@@ -2884,21 +2883,23 @@
   z-index: 2;
   width: auto;
   margin: 0;
-  padding: 3.4rem 0.25rem 0.35rem;
+  padding: 3.2rem 0.2rem 0.3rem;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  justify-content: flex-start;
+  gap: 0.28rem;
   min-height: 0;
   overflow: hidden;
 }
 
 .field-roster .mini {
   position: relative;
-  flex: 1 1 0;
+  flex: 0 1 3rem;
+  height: 3rem;
   width: 100%;
   min-width: 0;
-  min-height: 3.4rem;
-  max-height: 5rem;
+  min-height: 0;
+  max-height: 3rem;
   padding: 0;
   overflow: hidden;
   display: block;
