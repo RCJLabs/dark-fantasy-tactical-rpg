@@ -19,7 +19,7 @@ Five contracts, in order: the Toll Road, Ash Orchard, the Weeping Chapel, Iron M
 
 ## Unity status
 
-Starter systems, now with the next slice wired in code:
+Starter systems, parked until the browser march is finished:
 
 - Grid generation (`GridManager`)
 - Reachable tiles by move budget (`Pathfinder`) — rubble, brush, and mire cost 2; walls block; you may pass allies but not stop on anyone
@@ -38,4 +38,4 @@ Starter systems, now with the next slice wired in code:
 
 ## Next
 
-The order of work is in [ROADMAP.md](ROADMAP.md). The browser campaign already plays the five contracts. This repo catches Unity up to those rules, starting with a strike on the same click flow.
+The order of work is in [ROADMAP.md](ROADMAP.md). Next is the browser campaign: a fight you can read, scars you can see, a camp where you can buy a blade or refuse the contract, then a second march. Unity stays parked until that plays.
