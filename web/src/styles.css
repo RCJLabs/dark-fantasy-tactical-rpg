@@ -3317,6 +3317,10 @@
 .battle .token {
   z-index: 6;
 }
+
+.deploy .cell,
+.battle .cell {
+  z-index: 0;
   aspect-ratio: auto !important;
   min-height: 0 !important;
   min-width: 0 !important;
@@ -3349,6 +3353,9 @@
 .march-map .deploy-acts {
   justify-self: end;
 }
+
+.march-map {
+  height: 100dvh;
   overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
