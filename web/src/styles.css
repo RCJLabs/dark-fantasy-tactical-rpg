@@ -1449,18 +1449,23 @@
 
 .token.is-downed {
   z-index: 1;
-  transform-origin: 50% 85%;
-  animation: token-fall 0.48s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
 }
 
-.token.is-downed.is-still {
-  animation: none;
-  transform: rotate(72deg);
+.token.is-downed .hp,
+.token.is-downed .who,
+.token.is-downed .acting-ring,
+.token.is-downed .seals {
+  display: none;
 }
 
 .token.is-downed img {
-  animation: none;
+  transform-origin: 50% 100%;
   filter: grayscale(0.7) brightness(0.5);
+}
+
+.token.is-downed.is-still img {
+  animation: none;
+  transform: translateX(-50%) rotate(78deg);
 }
 
 .token.is-stepping img,
@@ -1468,12 +1473,16 @@
   animation: none;
 }
 
+.token.is-downed img {
+  animation: token-fall 0.48s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
 @keyframes token-fall {
   from {
-    transform: rotate(0deg);
+    transform: translateX(-50%) rotate(0deg);
   }
   to {
-    transform: rotate(72deg);
+    transform: translateX(-50%) rotate(78deg);
   }
 }
 
@@ -2097,7 +2106,7 @@
   .cell-threat,
   .ash,
   .node.is-open .seal,
-  .token.is-downed,
+  .token.is-downed img,
   .seal-pip,
   .token.is-stepping::after,
   .load-icon {
@@ -2105,8 +2114,8 @@
     transition: none;
   }
 
-  .token.is-downed {
-    transform: rotate(72deg);
+  .token.is-downed img {
+    transform: translateX(-50%) rotate(78deg);
   }
 }
 
