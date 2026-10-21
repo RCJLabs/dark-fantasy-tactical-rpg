@@ -25,6 +25,7 @@ These stay. A feature that breaks one of them is the wrong feature.
 - Roster of six: Sera Voss, Marrow, Isk, Sister Halden, Bran the Hound, Quill. Hire, deploy, rest.
 - Prime and detonate. Enemy play. Watch, threat cells, strike motion, health on the token.
 - The grid names who is acting. Ash, Hex, and Debt show the turns left. A pin shows. Gold stripes are the step that eats a Watch. A number on a foe is the strike, before you spend it.
+- Scars show on the portrait. A cut for each fall. A blade on their last life is pale, with gold cuts. You can pick them out of the roster without reading the count.
 - Coin, renown, a local save, and an ending when the company is gone or the Naming is spoken.
 - Skill trees behind a button on the roster. Seventy-five steps a blade. A full march only buys about two finished paths. That is the point.
 
@@ -43,9 +44,7 @@ Done. On the grid, without the log: who is acting, the mark and the turns left, 
 
 ### 2. Scars you can see
 
-A scar already cuts max health and can kill. It should show on the token and on the war table, not only as a number in a line of text. A blade on one life looks different from a blade that has not bled.
-
-Done when you can pick the wounded out of the roster without reading the scar count.
+Done. The portrait carries the cuts, on the war table and on the token. Last blood looks different from a fresh blade, and different from a blade that has bled but can still get up.
 
 ### 3. Camp
 
@@ -64,7 +63,7 @@ Done when a company that survived the Naming has somewhere to spend the renown i
 
 ## After the browser march
 
-Only once 2 through 4 play. The readable fight already does.
+Only once 3 and 4 play. The readable fight and the visible scars already do.
 
 ### 5. Unity plays a strike
 
@@ -91,4 +90,4 @@ Done when a save can go from an unnamed company to the Naming, or to a grave, in
 
 ## How to use this
 
-Work the next open milestone in the browser. That is scars you can see. Do not open Unity while 2 through 4 are still open.
+Work the next open milestone in the browser. That is camp: buy a blade, or refuse the contract. Do not open Unity while 3 and 4 are still open.
