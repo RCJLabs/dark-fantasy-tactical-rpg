@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 
 const root = process.cwd();
 const out = join(root, "dist-pages");
-const base = "/dark-fantasy-tactical-rpg";
+const origin = "https://ashmark.rcjlabs.com";
 
 const built = spawnSync("node", ["scripts/with-app-env.mjs", "node_modules/vite/bin/vite.js", "build"], {
   cwd: root,
@@ -59,13 +59,9 @@ walk(out, (path) => {
   if (!/\.(html|css|js|webmanifest)$/.test(path)) return;
   const text = readFileSync(path, "utf8");
   const next = text
-    .replaceAll('url("/art/', `url("${base}/art/`)
-    .replaceAll("url('/art/", `url('${base}/art/`)
-    .replaceAll("url(/art/", `url(${base}/art/`)
-    .replaceAll('href="/__grok/manifest.webmanifest"', `href="${base}/manifest.json"`)
-    .replaceAll(`href="${base}/manifest.webmanifest"`, `href="${base}/manifest.json"`)
-    .replaceAll('href="/favicon.svg"', `href="${base}/favicon.svg"`)
-    .replaceAll('href="/__grok/icon-180.png"', `href="${base}/art/icon-192.png"`);
+    .replaceAll('href="/__grok/manifest.webmanifest"', 'href="/manifest.json"')
+    .replaceAll('href="/favicon.svg"', 'href="/favicon.svg"')
+    .replaceAll('href="/__grok/icon-180.png"', 'href="/art/icon-192.png"');
   if (next !== text) writeFileSync(path, next);
 });
 
@@ -73,23 +69,24 @@ const manifest = JSON.stringify(
   {
     name: "Ashmark",
     short_name: "Ashmark",
-    id: `${base}/`,
-    start_url: `${base}/`,
-    scope: `${base}/`,
+    id: `${origin}/`,
+    start_url: "/",
+    scope: "/",
     display: "standalone",
     orientation: "landscape",
     background_color: "#100d0b",
     theme_color: "#100d0b",
     icons: [
-      { src: `${base}/art/icon-192.png`, sizes: "192x192", type: "image/png", purpose: "any" },
-      { src: `${base}/art/icon-512.png`, sizes: "512x512", type: "image/png", purpose: "any" },
-      { src: `${base}/art/icon-512.png`, sizes: "512x512", type: "image/png", purpose: "maskable" },
+      { src: "/art/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/art/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/art/icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
     ],
   },
   null,
   2,
 );
 writeFileSync(join(out, "manifest.json"), manifest);
+writeFileSync(join(out, "CNAME"), "ashmark.rcjlabs.com\n");
 writeFileSync(join(out, ".nojekyll"), "");
 
 cpSync(join(out, "index.html"), join(out, "404.html"));
