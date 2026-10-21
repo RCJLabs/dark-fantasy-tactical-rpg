@@ -4,7 +4,7 @@ Ashmark. A mercenary company with no name, taking contracts in the Pale Marches 
 
 Locked: the next work is the browser campaign. Unity waits until that march feels finished. Between contracts the company can spend coin on a blade, or refuse the next contract.
 
-The rules already play in the browser: five contracts, six blades, marks, scars, and the skill trees. This repository is the Unity product. It does not get new systems until the browser list below is done.
+The rules already play in the browser: five contracts, the company, marks, scars, and the skill trees. This repository is the Unity product. It does not get new systems until the browser list below is done.
 
 ## Laws
 
@@ -22,12 +22,13 @@ These stay. A feature that breaks one of them is the wrong feature.
 **Browser campaign, playable**
 
 - Contracts, in order: the Toll Road, Ash Orchard, the Weeping Chapel, Iron Mile, the Naming.
-- Roster of six: Sera Voss, Marrow, Isk, Sister Halden, Bran the Hound, Quill. Hire, deploy, rest.
+- Roster of Sera Voss, Marrow, and Isk. After the toll, Vetch will take 36 coin and a place. Halden, Bran, and Quill still wait further down the march.
+- Turn a contract down and the one after brings another body. The most hurt blade is scarred on the road. If that was their last blood, they do not walk back.
 - Prime and detonate. Enemy play. Watch, threat cells, strike motion, health on the token.
 - The grid names who is acting. Ash, Hex, and Debt show the turns left. A pin shows. Gold stripes are the step that eats a Watch. A number on a foe is the strike, before you spend it.
-- Scars show on the portrait. A cut for each fall. A blade on their last life is pale, with gold cuts. You can pick them out of the roster without reading the count.
+- Scars show on the portrait. A cut for each fall. A blade on their last life is pale, with gold cuts.
 - Coin, renown, a local save, and an ending when the company is gone or the Naming is spoken.
-- Skill trees behind a button on the roster. Seventy-five steps a blade. A full march only buys about two finished paths. That is the point.
+- Skill trees behind a button on the roster. Seventy-five steps a blade. A hired knife has no tree. Coin bought the edge, not a doctrine.
 
 **This repo, parked**
 
@@ -48,12 +49,7 @@ Done. The portrait carries the cuts, on the war table and on the token. Last blo
 
 ### 3. Camp
 
-Between contracts there is rest, a talent, and little else. Two choices, both real:
-
-- Spend coin on a blade. A hired edge, not a loot ladder. The roster changes because you paid, not only because someone fell.
-- Refuse the next contract. The one after is worse, and someone may not walk back.
-
-Done when two companies can leave the Toll Road with different rosters, and one of them got there by turning work down.
+Done. After the Toll Road you can buy Vetch, or turn the orchard down. One company leaves with a hired knife. The other leaves with a scar, and the Weeping Chapel brings an extra body.
 
 ### 4. The second march
 
@@ -63,7 +59,7 @@ Done when a company that survived the Naming has somewhere to spend the renown i
 
 ## After the browser march
 
-Only once 3 and 4 play. The readable fight and the visible scars already do.
+Only once 4 plays. The readable fight, the visible scars, and the camp choices already do.
 
 ### 5. Unity plays a strike
 
@@ -90,4 +86,4 @@ Done when a save can go from an unnamed company to the Naming, or to a grave, in
 
 ## How to use this
 
-Work the next open milestone in the browser. That is camp: buy a blade, or refuse the contract. Do not open Unity while 3 and 4 are still open.
+Work the next open milestone in the browser. That is the second march. Do not open Unity while it is still open.
