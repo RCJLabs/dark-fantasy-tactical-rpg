@@ -427,7 +427,9 @@ export function Battle({
           </span>
         ))}
         </div>
-        <p className="legend hud-legend">
+      </div>
+
+      <p className="legend hud-legend">
           <i className="swatch swatch-forest" /> forest hides you
           <i className="swatch swatch-rubble" /> rubble covers arrows
           <i className="swatch swatch-mire" /> mire bogs you
@@ -436,7 +438,6 @@ export function Battle({
           <i className="swatch swatch-watch" /> Watch
           <span className="dot" /> Ash, Hex, Debt — the turns left
         </p>
-      </div>
 
       <ul className="roster-mini hud-roster">
         {battle.units
