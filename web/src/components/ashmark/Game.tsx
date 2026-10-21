@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef, useState } from "react";
-import { BookOpen, Coins, Crosshair, Eye, Flag, Flame, Footprints, GitBranch, Hourglass, Moon, Music, Shield, Skull, Swords, Tent, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
+import { Coins, Crosshair, Eye, Flag, Flame, Footprints, GitBranch, Hourglass, Moon, Music, Shield, Skull, Swords, Tent, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
 import { HOT_MEAL, ENEMY_DEFS, MERC_DEFS, SKILLS, missionById } from "@/game/data";
 import { appliedStats, branchesOf, talentNames } from "@/game/talents";
 import {
@@ -39,7 +39,6 @@ export function Game() {
   const [slot, setSlot] = useState<number | null>(null);
   const [slots, setSlots] = useState<(SlotFile | null)[]>([]);
   const [settings, setSettings] = useState<Settings>({ muted: false, shake: true });
-  const [chronicle, setChronicle] = useState(false);
   const [sure, setSure] = useState(false);
   const [bootArt] = useState(pickLoadingArt);
   const slotRef = useRef<number | null>(null);
@@ -175,14 +174,7 @@ export function Game() {
         />
       )}
       {boot === "play" && state.screen === "table" && (
-        <WarTable
-          state={state}
-          dispatch={go}
-          chronicle={chronicle}
-          setChronicle={setChronicle}
-          sure={sure}
-          setSure={setSure}
-        />
+        <WarTable state={state} dispatch={go} sure={sure} setSure={setSure} />
       )}
       {boot === "play" && state.screen === "deploy" && state.deployId && (
         <Deploy state={state} dispatch={go} missionId={state.deployId} />
@@ -207,15 +199,11 @@ export function Game() {
 function WarTable({
   state,
   dispatch,
-  chronicle,
-  setChronicle,
   sure,
   setSure,
 }: {
   state: Campaign;
   dispatch: (a: Action) => void;
-  chronicle: boolean;
-  setChronicle: (v: boolean) => void;
   sure: boolean;
   setSure: (v: boolean) => void;
 }) {
@@ -366,65 +354,93 @@ function WarTable({
       )}
 
       {sheet === "camp" && (
-        <div className="sheet">
-          <header className="sheet-bar">
-            <button type="button" className="btn btn-ghost" onClick={() => setSheet("hub")}>
-              Back
-            </button>
+        <div className="camp">
+          <header className="deploy-bar">
             <div>
-              <p className="kicker">{state.gold} coin</p>
-              <h2>Camp</h2>
+              <strong>Camp</strong>
+              <span>
+                {state.gold} coin on the table
+                <span className="dot" />
+                {state.renown} renown
+              </span>
+            </div>
+            <div className="deploy-acts">
+              <button type="button" className="btn btn-ghost" onClick={() => setSheet("hub")}>
+                Back
+              </button>
             </div>
           </header>
-          <div className="camp-body">
-          <div className="camp-fit">
-            <button type="button" className="btn btn-ghost" onClick={() => dispatch({ type: "rest", kind: "cold" })}>
-              <Moon />
-              Cold camp
-              <small>Free. Mend a portion.</small>
-            </button>
-            <button type="button" className="btn btn-ghost" disabled={state.gold < HOT_MEAL} onClick={() => dispatch({ type: "rest", kind: "hot" })}>
-              <Tent />
-              Hot meal
-              <small>{HOT_MEAL} coin. Full mend.</small>
-            </button>
-            {hires.map((def) => (
-              <button
-                key={def.id}
-                type="button"
-                className="btn btn-gold"
-                disabled={state.gold < (def.cost ?? 0)}
-                onClick={() => dispatch({ type: "recruit", defId: def.id })}
-              >
-                Sign {def.name}
-                <small>
-                  {def.role} · {def.cost} coin
-                </small>
-              </button>
-            ))}
-            <button type="button" className="btn btn-ghost" onClick={() => setChronicle(!chronicle)}>
-              <BookOpen />
-              Chronicle
-            </button>
-            <button type="button" className="text-btn" onClick={() => setSure(!sure)}>
-              {sure ? "Disband for certain?" : "Disband"}
-            </button>
-            {sure && (
-              <button type="button" className="btn btn-blood" onClick={() => dispatch({ type: "disband" })}>
-                Burn the book
-              </button>
-            )}
-          </div>
-          {chronicle && (
-            <ol className="chronicle chronicle-fit">
-              {[...state.chronicle].reverse().slice(0, 4).map((entry) => (
-                <li key={entry.id}>
-                  <h3>{entry.title}</h3>
-                  <p>{entry.body}</p>
+          <ul className="roster-mini field-roster">
+            {living.map((merc) => {
+              const frail = isFrail(merc.maxHp);
+              const signedOn = MERC_DEFS.some((def) => def.id === merc.defId && def.cost);
+              return (
+                <li key={merc.id}>
+                  <div className={`mini is-on ${woundClass(merc.scars, frail)}`} title={signedOn ? `${merc.name} signed on` : merc.name}>
+                    <span className={`portrait ${woundClass(merc.scars, frail)}`}>
+                      <img src={asset(`/art/${merc.art}.png`)} alt={merc.name} />
+                      <ScarMarks scars={merc.scars} frail={frail} />
+                    </span>
+                  </div>
                 </li>
-              ))}
-            </ol>
-          )}
+              );
+            })}
+          </ul>
+          <div className="camp-ground">
+            <section className="camp-morning">
+              <p className="kicker">The morning</p>
+              <h2>{offer ? missionById(offer).name : "No road open"}</h2>
+              <p>{offer ? missionById(offer).brief : "The table is clear. Nothing waits until you take a contract."}</p>
+              {offer && state.bitter.includes(offer) && <p className="mark-line">This one is worse. You turned the last work down.</p>}
+              <p className="quiet">
+                Standing: {living.map((merc) => `${merc.name.split(" ")[0]} ${merc.hp}/${merc.maxHp}`).join(" · ") || "No one"}
+              </p>
+              <p className="quiet">
+                Signed on:{" "}
+                {living.filter((merc) => MERC_DEFS.some((def) => def.id === merc.defId && def.cost)).map((merc) => merc.name).join(", ") ||
+                  "No one has taken the coin."}
+              </p>
+              <p className="quiet">
+                Turned down: {state.refused.map((id) => missionById(id).name).join(", ") || "Nothing."}
+              </p>
+              {dead.length > 0 && <p className="quiet">In the ground: {dead.map((merc) => merc.name).join(", ")}</p>}
+            </section>
+            <section className="camp-night">
+              <p className="kicker">The night</p>
+              <button type="button" className="btn btn-ghost" onClick={() => dispatch({ type: "rest", kind: "cold" })}>
+                <Moon />
+                Cold camp
+                <small>Free. Mend a portion.</small>
+              </button>
+              <button type="button" className="btn btn-ghost" disabled={state.gold < HOT_MEAL} onClick={() => dispatch({ type: "rest", kind: "hot" })}>
+                <Tent />
+                Hot meal
+                <small>{HOT_MEAL} coin. Full mend.</small>
+              </button>
+              {hires[0] ? (
+                <button
+                  type="button"
+                  className="btn btn-gold"
+                  disabled={state.gold < (hires[0].cost ?? 0)}
+                  onClick={() => dispatch({ type: "recruit", defId: hires[0].id })}
+                >
+                  Sign {hires[0].name}
+                  <small>
+                    {hires[0].role} · {hires[0].cost} coin. One offer.
+                  </small>
+                </button>
+              ) : (
+                <p className="quiet">No one is asking for coin tonight.</p>
+              )}
+              <button type="button" className="text-btn" onClick={() => setSure(!sure)}>
+                {sure ? "Disband for certain?" : "Disband"}
+              </button>
+              {sure && (
+                <button type="button" className="btn btn-blood" onClick={() => dispatch({ type: "disband" })}>
+                  Burn the book
+                </button>
+              )}
+            </section>
           </div>
         </div>
       )}

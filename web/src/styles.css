@@ -3225,7 +3225,74 @@
   -webkit-box-orient: vertical;
 }
 
-.field-hud .text-btn {
-  flex: none;
+.game:has(.camp) .chrome {
+  top: 0.28rem;
+  left: calc(3.25rem + (100% - 3.25rem) / 2);
+}
+
+.game:has(.camp) .menu-back,
+.game:has(.camp) .mute {
+  min-height: 2.15rem;
+  height: 2.15rem;
+}
+
+.game:has(.camp) .mute {
+  width: 2.15rem;
+}
+
+.camp {
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  grid-template-rows: 2.7rem minmax(0, 1fr);
+  background: #100d0b;
+}
+
+.camp-ground {
+  grid-column: 2;
+  grid-row: 2;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(12rem, 0.8fr);
+  gap: 1rem;
+  padding: 0.35rem 0.8rem 0.55rem 0.4rem;
+  overflow: hidden;
+}
+
+.camp-morning,
+.camp-night {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.camp-morning h2 {
+  margin: 0.15rem 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.camp-morning p,
+.camp-night p {
+  margin: 0.2rem 0;
+}
+
+.camp-morning > p:nth-of-type(2) {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.camp-night {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.camp-night .btn {
+  min-height: 2.6rem;
 }
 

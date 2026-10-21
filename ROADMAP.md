@@ -178,4 +178,4 @@ Unity may copy the browser, starting with a strike on the Toll Road. Not before 
 
 ## How to use this
 
-The next phase is 6. Camp is a place. A step, a strike, a fall, and a mark can be followed with the log closed.
+The next phase is 7. Chronicle and graves. Camp is a place: the morning, the coin, and one hire.
