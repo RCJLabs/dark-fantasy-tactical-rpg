@@ -2,7 +2,9 @@
 
 Ashmark. A mercenary company with no name, taking contracts in the Pale Marches until the realm has to say what they are called.
 
-The rules are already playable in the browser campaign: five contracts, six blades, marks, scars, and the skill trees. This repository is the Unity product (mobile, grid, low-poly). The roadmap is the order those two meet. Do not invent a third game in between.
+Locked: the next work is the browser campaign. Unity waits until that march feels finished. Between contracts the company can spend coin on a blade, or refuse the next contract.
+
+The rules already play in the browser: five contracts, six blades, marks, scars, and the skill trees. This repository is the Unity product. It does not get new systems until the browser list below is done.
 
 ## Laws
 
@@ -25,13 +27,14 @@ These stay. A feature that breaks one of them is the wrong feature.
 - Coin, renown, a local save, and an ending when the company is gone or the Naming is spoken.
 - Skill trees behind a button on the roster. Seventy-five steps a blade. A full march only buys about two finished paths. That is the point.
 
-**This repo**
+**This repo, parked**
 
 - A grid, a pathfinder, and a click that moves a unit onto a gold tile.
 - Turn order, and the three marks as code on top of the skill assets.
 - No strike yet. No enemy brain. No contract scenes. No company between fights.
+- Not the next task. See "After the browser march."
 
-## The order
+## Now
 
 ### 1. Read the fight
 
@@ -52,42 +55,46 @@ Done when you can pick the wounded out of the roster without reading the scar co
 
 ### 3. Camp
 
-Between contracts there is rest, a talent, and little else. Add one real choice:
+Between contracts there is rest, a talent, and little else. Two choices, both real:
 
-- Spend coin on a blade (a hired edge, not a new system of loot), or
-- Turn down the next contract, knowing the one after it will be worse and someone may not walk back.
+- Spend coin on a blade. A hired edge, not a loot ladder. The roster changes because you paid, not only because someone fell.
+- Refuse the next contract. The one after is worse, and someone may not walk back.
 
-Done when two companies can leave the Toll Road with different rosters for a reason other than who got dropped.
+Done when two companies can leave the Toll Road with different rosters, and one of them got there by turning work down.
 
-### 4. Unity plays a strike
+### 4. The second march
+
+The five contracts end, and the name is not the end of the company. A second table in the browser. Meaner foes who prime and spend the same three marks against you. Not a new ruleset. The old one, pointed the other way.
+
+Done when a company that survived the Naming has somewhere to spend the renown it earned, and the march still feels like the same game.
+
+## After the browser march
+
+Only once 1 through 4 play.
+
+### 5. Unity plays a strike
 
 Bring the browser turn onto this repo's click flow.
 
 - Click a foe in reach to strike. Click a skill, then a tile, to prime or spend.
 - An enemy brain that steps, primes, and spends, using the same rules as the player.
-- The Toll Road as one scene: ditch, risen, and the gold tile still meaning "you can walk here."
+- The Toll Road as one scene. The gold tile still means you can walk here.
 
 Done when the Toll Road can be lost and won in Unity without falling back to the browser.
 
-### 5. The five contracts, in Unity
+### 6. The five contracts, in Unity
 
-Ash Orchard, the Weeping Chapel, Iron Mile, and the Naming, as scenes. Between them: coin, renown, hires, rest, and scars. The Naming speaks the company name and ends the march. No one left alive ends it sooner.
+Ash Orchard, the Weeping Chapel, Iron Mile, and the Naming, as scenes. Between them: coin, renown, hires, the camp choices, and scars. The Naming speaks the company name and ends the first march. No one left alive ends it sooner.
 
 Done when a save can go from an unnamed company to the Naming, or to a grave, inside this project.
-
-### 6. The second march
-
-The five contracts end, and the name is not the end of the company. A second table. Meaner foes who prime and spend the same three marks against you. Not a new ruleset. The old one, pointed the other way.
-
-Done when a company that survived the Naming has somewhere to spend the renown it earned.
 
 ## Not this
 
 - Multiplayer. The company is one player's.
-- A third march, procedural contracts, or a loot ladder.
+- A third march, procedural contracts, or a loot ladder. Coin buys a blade, not a catalog.
 - Rewriting the trees. The branches are exclusive on purpose. More nodes will not make a fight clearer.
-- A store page, or a full low-poly roster, before the Toll Road runs in Unity.
+- Unity work, a store page, or a full low-poly roster, before the second march plays in the browser.
 
 ## How to use this
 
-Work the next open milestone. When it lands, mark it done in this file in the same commit. Do not start 6 while 4 is still a script with no scene.
+Work the next open milestone in the browser. When it lands, mark it done in this file in the same commit. Do not open Unity while 1 through 4 are still open.
