@@ -3547,119 +3547,102 @@
   background-position: center !important;
 }
 
-/* The field is the screen. The bar, the roll, and the orders sit on top of it. */
+/* Battlefield. One landscape screen. The grid is the space that is left, and every square is on it. */
 .game[data-screen="battle"] .chrome,
 .game[data-screen="deploy"] .chrome {
-  top: 0.22rem;
+  top: 0.28rem;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.deploy,
-.battle {
-  position: relative !important;
-  display: block !important;
-  width: 100% !important;
-  height: 100dvh !important;
-  max-height: 100dvh !important;
-  overflow: hidden !important;
-}
-
-.deploy .board-wrap,
-.battle .board-wrap {
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 0 !important;
-  display: block !important;
-  width: auto !important;
-  height: auto !important;
-  max-width: none !important;
-  max-height: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-}
-
-.deploy .board-frame,
-.battle .board-frame,
-.deploy .board,
-.battle .board {
-  position: absolute !important;
-  inset: 0 !important;
-  width: auto !important;
-  height: auto !important;
-  max-width: none !important;
-  max-height: none !important;
-  aspect-ratio: auto !important;
-  margin: 0 !important;
-}
-
-.deploy .deploy-bar,
-.battle .field-bar {
-  position: absolute !important;
-  z-index: 8 !important;
-  top: 0;
-  left: 0;
-  right: 0;
-  grid-column: auto !important;
-  grid-row: auto !important;
-  background: linear-gradient(to bottom, rgba(12, 10, 9, 0.94), rgba(12, 10, 9, 0.5) 72%, transparent);
-}
-
-.deploy .field-roster,
-.battle .field-roster {
-  position: absolute !important;
-  z-index: 8 !important;
-  top: 2.9rem;
-  bottom: 0.35rem;
-  left: 0.2rem;
-  width: 2.7rem;
-  margin: 0;
-  padding: 0;
-  grid-column: auto !important;
-  grid-row: auto !important;
-  background: none;
-}
-
-.battle .field-hud {
-  position: absolute !important;
-  z-index: 8 !important;
-  left: 3.2rem;
-  right: 0.35rem;
-  bottom: 0.3rem;
-  grid-column: auto !important;
-  grid-row: auto !important;
-  margin: 0;
-}
-
-/* Full-bleed field. Nothing around it can shrink the grid. */
 .field-screen {
   position: fixed !important;
   inset: 0 !important;
   z-index: 5 !important;
-  width: 100vw !important;
-  height: 100dvh !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  grid-template-columns: 2.85rem minmax(0, 1fr) !important;
+  grid-template-rows: 2.6rem minmax(0, 1fr) !important;
+  width: 100% !important;
+  height: 100svh !important;
+  max-width: none !important;
+  max-height: 100svh !important;
+  margin: 0 !important;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
+  overflow: hidden !important;
+  background: #100d0b !important;
+}
+
+.field-screen.battle {
+  grid-template-rows: 2.6rem minmax(0, 1fr) auto !important;
+}
+
+.field-screen .deploy-bar,
+.field-screen .field-bar {
+  position: relative !important;
+  inset: auto !important;
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  z-index: 2 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 11.5rem minmax(0, 1fr) !important;
+  align-items: center !important;
+  height: 2.6rem !important;
+  margin: 0 !important;
+  padding: 0 0.4rem !important;
+  background: #100d0b !important;
+}
+
+.field-screen .deploy-acts,
+.field-screen .field-bar .btn {
+  grid-column: 3 !important;
+  justify-self: end !important;
+}
+
+.field-screen .field-roster {
+  position: relative !important;
+  inset: auto !important;
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  z-index: 2 !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0.15rem 0.12rem !important;
+  background: #100d0b !important;
+}
+
+.field-screen .board-wrap {
+  position: relative !important;
+  inset: auto !important;
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  z-index: 1 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
   max-width: none !important;
   max-height: none !important;
   margin: 0 !important;
   padding: 0 !important;
   overflow: hidden !important;
-  background: #100d0b !important;
+  place-items: stretch !important;
 }
 
-.field-screen .board-wrap,
 .field-screen .board-frame,
 .field-screen .board {
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 0 !important;
+  position: relative !important;
+  inset: auto !important;
   display: block !important;
   width: 100% !important;
   height: 100% !important;
-  max-width: none !important;
-  max-height: none !important;
   min-width: 0 !important;
   min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
   margin: 0 !important;
   padding: 0 !important;
   border-radius: 0 !important;
@@ -3672,9 +3655,25 @@
 }
 
 .field-screen .cell {
-  min-height: 0 !important;
   min-width: 0 !important;
+  min-height: 0 !important;
+  max-height: none !important;
   height: auto !important;
   aspect-ratio: auto !important;
+  align-self: stretch !important;
+}
+
+.field-screen .field-hud {
+  position: relative !important;
+  inset: auto !important;
+  grid-column: 1 / -1 !important;
+  grid-row: 3 !important;
+  z-index: 2 !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: auto !important;
+  max-height: none !important;
+  margin: 0.15rem 0.3rem 0.2rem !important;
 }
 
