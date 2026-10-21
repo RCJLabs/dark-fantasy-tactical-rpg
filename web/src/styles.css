@@ -1286,12 +1286,10 @@
 
 .cell-selected {
   box-shadow: inset 0 0 0 3px var(--color-gold-2);
-  z-index: 3;
 }
 
 .cell-selected-foe {
   box-shadow: inset 0 0 0 3px var(--color-blood-2);
-  z-index: 3;
 }
 
 .cell-strike,
@@ -1379,7 +1377,7 @@
 .token {
   pointer-events: none;
   position: relative;
-  z-index: 2;
+  z-index: 6;
   align-self: stretch;
   justify-self: stretch;
   min-width: 0;
@@ -3294,5 +3292,141 @@
 
 .camp-night .btn {
   min-height: 2.6rem;
+}
+
+.deploy .board-wrap,
+.battle .board-wrap {
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.deploy .board-frame,
+.battle .board-frame,
+.deploy .board,
+.battle .board {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: auto !important;
+}
+
+.deploy .token,
+.battle .token {
+  z-index: 6;
+}
+  aspect-ratio: auto !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  height: auto;
+  overflow: hidden;
+}
+
+.game:has(.march-map) .chrome {
+  top: 0.28rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.game:has(.march-map) .menu-back,
+.game:has(.march-map) .mute {
+  min-height: 2.15rem;
+  height: 2.15rem;
+}
+
+.game:has(.march-map) .mute {
+  width: 2.15rem;
+}
+
+.march-map .deploy-bar {
+  grid-column: 1;
+  grid-row: 1;
+  grid-template-columns: minmax(0, 1fr) 11.5rem minmax(0, 1fr);
+}
+
+.march-map .deploy-acts {
+  justify-self: end;
+}
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 2.7rem minmax(0, 1fr);
+  background: #1a140f;
+}
+
+.map-stage {
+  grid-row: 2;
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  padding: 0.15rem 0.35rem 0.3rem;
+}
+
+.map-sheet {
+  position: relative;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: 1792 / 1008;
+}
+
+.map-sheet img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: 0.15rem;
+}
+
+.map-pin {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.08rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #1a120c;
+}
+
+.map-pin i {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--color-gold-2);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.map-pin span {
+  padding: 0 0.25rem;
+  font-size: 0.66rem;
+  line-height: 1.2;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #1a120c;
+  background: var(--color-gold-2);
+  border-radius: 0.15rem;
+}
+
+.map-pin.is-sealed {
+  opacity: 0.42;
+}
+
+.map-pin.is-radiant i,
+.map-pin.is-radiant span {
+  background: var(--color-blood-2);
+  color: #f6f0e6;
+}
+
+.map-pin.is-on i,
+.map-pin.is-on span {
+  outline: 2px solid #f6f0e6;
 }
 

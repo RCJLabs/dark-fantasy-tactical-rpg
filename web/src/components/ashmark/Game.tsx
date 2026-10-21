@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { Coins, Crosshair, Eye, Flag, Flame, Footprints, GitBranch, Hourglass, Moon, Music, Shield, Skull, Swords, Tent, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
-import { HOT_MEAL, ENEMY_DEFS, MERC_DEFS, SKILLS, missionById } from "@/game/data";
+import { HOT_MEAL, ENEMY_DEFS, MERC_DEFS, SKILLS, missionById, type Mission } from "@/game/data";
 import { appliedStats, branchesOf, talentNames } from "@/game/talents";
 import {
   initialCampaign,
@@ -211,6 +211,7 @@ function WarTable({
   const dead = state.roster.filter((m) => !m.alive);
   const [treeId, setTreeId] = useState<string | null>(null);
   const [refuseId, setRefuseId] = useState<string | null>(null);
+  const [mapId, setMapId] = useState<string | null>(null);
   const [sheet, setSheet] = useState<"hub" | "contracts" | "camp">("hub");
   const owned = new Set(state.roster.map((m) => m.defId));
   const offer = nextOffer(state);
@@ -274,83 +275,19 @@ function WarTable({
       )}
 
       {sheet === "contracts" && (
-        <div className="sheet">
-          <header className="sheet-bar">
-            <button type="button" className="btn btn-ghost" onClick={() => setSheet("hub")}>
-              Back
-            </button>
-            <div>
-              <p className="kicker">{second ? "The second table" : "War table"}</p>
-              <h2>Contracts</h2>
-            </div>
-          </header>
-          <div className={radiant.length ? "contract-bands" : "contract-bands is-one"}>
-            <div className="contract-band">
-              {contracts.map((mission, index) => {
-                const prev = index === 0 ? null : contracts[index - 1].id;
-                const done = state.cleared.includes(mission.id);
-                const open = index === 0 || Boolean(prev && state.cleared.includes(prev));
-                return (
-                  <article key={mission.id} className={`contract-card ${open ? "is-open" : "is-locked"}`}>
-                    <p className="kicker">{done ? "Kept" : open ? mission.place : "Sealed"}</p>
-                    <h3>{mission.name}</h3>
-                    <p>{open ? mission.brief : "Finish the contract before this one."}</p>
-                    {open && (
-                      <p className="quiet">
-                        {done ? `March again for ${Math.ceil(mission.gold / 2)} coin.` : `${mission.gold} coin · ${mission.renown} renown`}
-                      </p>
-                    )}
-                    {open && (
-                      <div className="contract-acts">
-                        <button type="button" className="btn btn-gold" onClick={() => dispatch({ type: "open-deploy", missionId: mission.id })}>
-                          {done ? "Again" : "Take it"}
-                        </button>
-                        {!done && offer === mission.id && !state.refused.includes(mission.id) && (
-                          <button
-                            type="button"
-                            className="btn btn-blood"
-                            onClick={() => {
-                              if (refuseId === mission.id) {
-                                dispatch({ type: "refuse", missionId: mission.id });
-                                setRefuseId(null);
-                              } else {
-                                setRefuseId(mission.id);
-                              }
-                            }}
-                          >
-                            {refuseId === mission.id ? "Certain" : "Refuse"}
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </article>
-                );
-              })}
-            </div>
-            {radiant.length > 0 && (
-              <div className="contract-band">
-                {radiant.map((mission) => {
-                  const done = state.cleared.includes(mission.id);
-                  return (
-                    <article key={mission.id} className="contract-card is-open is-radiant">
-                      <p className="kicker">{done ? "Kept" : "Radiant"}</p>
-                      <h3>{mission.name}</h3>
-                      <p>{mission.brief}</p>
-                      <p className="quiet">
-                        {done ? `Hunt again for ${Math.ceil(mission.gold / 2)} coin.` : `${mission.gold} coin · ${mission.renown} renown`}
-                      </p>
-                      <div className="contract-acts">
-                        <button type="button" className="btn btn-gold" onClick={() => dispatch({ type: "open-deploy", missionId: mission.id })}>
-                          {done ? "Again" : "Take it"}
-                        </button>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
+        <MarchMap
+          state={state}
+          dispatch={dispatch}
+          contracts={contracts}
+          radiant={radiant}
+          offer={offer}
+          second={second}
+          mapId={mapId}
+          setMapId={setMapId}
+          refuseId={refuseId}
+          setRefuseId={setRefuseId}
+          onBack={() => setSheet("hub")}
+        />
       )}
 
       {sheet === "camp" && (
@@ -700,6 +637,143 @@ function SkillTree({
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+const MAP_SPOT: Record<string, [number, number]> = {
+  toll: [14, 50],
+  orchard: [24, 24],
+  chapel: [35, 48],
+  iron: [60, 48],
+  naming: [82, 40],
+  answer: [54, 72],
+  market: [70, 84],
+  echo: [86, 62],
+  mere: [16, 76],
+  thornwife: [40, 20],
+  drown: [42, 78],
+  wyrmmile: [68, 22],
+  choir: [90, 18],
+};
+
+const MAP_SHORT: Record<string, string> = {
+  toll: "Toll Road",
+  orchard: "Orchard",
+  chapel: "Chapel",
+  iron: "Iron Mile",
+  naming: "Naming",
+  answer: "Answered",
+  market: "Market",
+  echo: "Echo",
+  mere: "Mere",
+  thornwife: "Thorn",
+  drown: "Drown",
+  wyrmmile: "Wyrm",
+  choir: "Choir",
+};
+
+function MarchMap({
+  state,
+  dispatch,
+  contracts,
+  radiant,
+  offer,
+  second,
+  mapId,
+  setMapId,
+  refuseId,
+  setRefuseId,
+  onBack,
+}: {
+  state: Campaign;
+  dispatch: (a: Action) => void;
+  contracts: Mission[];
+  radiant: Mission[];
+  offer: string | null;
+  second: boolean;
+  mapId: string | null;
+  setMapId: (id: string | null) => void;
+  refuseId: string | null;
+  setRefuseId: (id: string | null) => void;
+  onBack: () => void;
+}) {
+  const pins = [...contracts, ...radiant];
+  const openOf = (mission: Mission) => {
+    if (mission.radiant) return true;
+    const index = contracts.findIndex((item) => item.id === mission.id);
+    if (index < 0) return false;
+    const prev = index === 0 ? null : contracts[index - 1].id;
+    return index === 0 || Boolean(prev && state.cleared.includes(prev));
+  };
+  const picked = pins.find((mission) => mission.id === mapId) ?? null;
+  const pickedOpen = picked ? openOf(picked) : false;
+  const pickedDone = picked ? state.cleared.includes(picked.id) : false;
+  return (
+    <div className="march-map">
+      <header className="deploy-bar">
+        <div>
+          <strong>{picked ? picked.name : second ? "The second table" : "The Pale Marches"}</strong>
+          <span>
+            {picked
+              ? pickedOpen
+                ? pickedDone
+                  ? `March again for ${Math.ceil(picked.gold / 2)} coin.`
+                  : `${picked.gold} coin · ${picked.renown} renown`
+                : "Finish the contract before this one."
+              : "The work is on the ground. Choose one."}
+          </span>
+        </div>
+        <div className="deploy-acts">
+          <button type="button" className="btn btn-ghost" onClick={onBack}>
+            Back
+          </button>
+          {picked && pickedOpen && (
+            <button type="button" className="btn btn-gold" onClick={() => dispatch({ type: "open-deploy", missionId: picked.id })}>
+              {pickedDone ? "Again" : "Take it"}
+            </button>
+          )}
+          {picked && pickedOpen && !pickedDone && offer === picked.id && !state.refused.includes(picked.id) && (
+            <button
+              type="button"
+              className="btn btn-blood"
+              onClick={() => {
+                if (refuseId === picked.id) {
+                  dispatch({ type: "refuse", missionId: picked.id });
+                  setRefuseId(null);
+                  setMapId(null);
+                } else {
+                  setRefuseId(picked.id);
+                }
+              }}
+            >
+              {refuseId === picked.id ? "Certain" : "Refuse"}
+            </button>
+          )}
+        </div>
+      </header>
+      <div className="map-stage">
+        <div className="map-sheet">
+          <img src={asset("/art/marches-map.png")} alt="The Pale Marches" />
+          {pins.map((mission) => {
+            const spot = MAP_SPOT[mission.id] ?? [50, 50];
+            const open = openOf(mission);
+            const done = state.cleared.includes(mission.id);
+            return (
+              <button
+                key={mission.id}
+                type="button"
+                className={`map-pin ${mission.radiant ? "is-radiant" : ""} ${open ? "is-open" : "is-sealed"} ${done ? "is-kept" : ""} ${mapId === mission.id ? "is-on" : ""}`}
+                style={{ left: `${spot[0]}%`, top: `${spot[1]}%` }}
+                onClick={() => setMapId(mission.id)}
+              >
+                <i />
+                <span>{MAP_SHORT[mission.id] ?? mission.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
