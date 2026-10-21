@@ -38,6 +38,4 @@ Starter systems, now with the next slice wired in code:
 
 ## Next
 
-- Attack and skill targeting on the same click flow
-- Enemy brain that steps, primes, and spends marks
-- The five Pale Marches contracts as scenes
+The order of work is in [ROADMAP.md](ROADMAP.md). The browser campaign already plays the five contracts. This repo catches Unity up to those rules, starting with a strike on the same click flow.
