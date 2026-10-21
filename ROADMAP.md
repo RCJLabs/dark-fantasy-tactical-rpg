@@ -2,9 +2,9 @@
 
 Ashmark. A mercenary company with no name, taking contracts in the Pale Marches until the realm has to say what they are called.
 
-Locked: the next work is the browser campaign. Unity waits until that march feels finished. Between contracts the company can spend coin on a blade, or refuse the next contract.
+The browser march is finished. The next open work is Unity. Between contracts the company can still spend coin on a blade, or refuse the next contract.
 
-The rules already play in the browser: five contracts, the company, marks, scars, and the skill trees. This repository is the Unity product. It does not get new systems until the browser list below is done.
+The rules play in the browser: two tables, the company, marks, scars, and the skill trees. This repository is the Unity product. It does not get new systems until a browser milestone is the one being copied across.
 
 ## Laws
 
@@ -21,13 +21,16 @@ These stay. A feature that breaks one of them is the wrong feature.
 
 **Browser campaign, playable**
 
-- Contracts, in order: the Toll Road, Ash Orchard, the Weeping Chapel, Iron Mile, the Naming.
-- Roster of Sera Voss, Marrow, and Isk. After the toll, Vetch will take 36 coin and a place. Halden, Bran, and Quill still wait further down the march.
+- First table: the Toll Road, Ash Orchard, the Weeping Chapel, Iron Mile, the Naming.
+- The Naming speaks the company name and opens the second table. It does not close the book.
+- Second table: the Answered Road, Hex Market, the Echo. They prime and spend Ashbrand, Hexrot, and Blooddebt. Same rules, pointed back.
+- The Echo falling, or no one left alive, ends it. Until then the skill trees still take the renown.
+- Roster of Sera Voss, Marrow, and Isk. After the toll, Vetch will take 36 coin and a place. Halden, Bran, and Quill still wait further down the first march.
 - Turn a contract down and the one after brings another body. The most hurt blade is scarred on the road. If that was their last blood, they do not walk back.
 - Prime and detonate. Enemy play. Watch, threat cells, strike motion, health on the token.
 - The grid names who is acting. Ash, Hex, and Debt show the turns left. A pin shows. Gold stripes are the step that eats a Watch. A number on a foe is the strike, before you spend it.
 - Scars show on the portrait. A cut for each fall. A blade on their last life is pale, with gold cuts.
-- Coin, renown, a local save, and an ending when the company is gone or the Naming is spoken.
+- Coin, renown, and a local save.
 - Skill trees behind a button on the roster. Seventy-five steps a blade. A hired knife has no tree. Coin bought the edge, not a doctrine.
 
 **This repo, parked**
@@ -35,7 +38,7 @@ These stay. A feature that breaks one of them is the wrong feature.
 - A grid, a pathfinder, and a click that moves a unit onto a gold tile.
 - Turn order, and the three marks as code on top of the skill assets.
 - No strike yet. No enemy brain. No contract scenes. No company between fights.
-- Not the next task. See "After the browser march."
+- Next task. See "After the browser march."
 
 ## Now
 
@@ -53,13 +56,11 @@ Done. After the Toll Road you can buy Vetch, or turn the orchard down. One compa
 
 ### 4. The second march
 
-The five contracts end, and the name is not the end of the company. A second table in the browser. Meaner foes who prime and spend the same three marks against you. Not a new ruleset. The old one, pointed the other way.
-
-Done when a company that survived the Naming has somewhere to spend the renown it earned, and the march still feels like the same game.
+Done. After the Naming the war table changes. The Answered Road writes Ashbrand and a crow spends it. Hex Market primes Hexrot and Blooddebt. The Echo spends whatever you are wearing. The trees are still there for the renown. The book closes when the Echo falls.
 
 ## After the browser march
 
-Only once 4 plays. The readable fight, the visible scars, and the camp choices already do.
+The browser list is done. Unity is open.
 
 ### 5. Unity plays a strike
 
@@ -73,17 +74,17 @@ Done when the Toll Road can be lost and won in Unity without falling back to the
 
 ### 6. The five contracts, in Unity
 
-Ash Orchard, the Weeping Chapel, Iron Mile, and the Naming, as scenes. Between them: coin, renown, hires, the camp choices, and scars. The Naming speaks the company name and ends the first march. No one left alive ends it sooner.
+Ash Orchard, the Weeping Chapel, Iron Mile, and the Naming, as scenes. Between them: coin, renown, hires, the camp choices, and scars. The Naming speaks the company name and opens the second table, it does not end the company. No one left alive ends it sooner. The Echo ends the second march.
 
-Done when a save can go from an unnamed company to the Naming, or to a grave, inside this project.
+Done when a save can go from an unnamed company to the Echo, or to a grave, inside this project.
 
 ## Not this
 
 - Multiplayer. The company is one player's.
 - A third march, procedural contracts, or a loot ladder. Coin buys a blade, not a catalog.
 - Rewriting the trees. The branches are exclusive on purpose. More nodes will not make a fight clearer.
-- Unity work, a store page, or a full low-poly roster, before the second march plays in the browser.
+- A store page, or a full low-poly roster, before the Toll Road can be won in Unity.
 
 ## How to use this
 
-Work the next open milestone in the browser. That is the second march. Do not open Unity while it is still open.
+The browser march is finished. The next open milestone is Unity plays a strike.
