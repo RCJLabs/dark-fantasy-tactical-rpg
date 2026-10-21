@@ -3351,7 +3351,13 @@
 }
 
 .march-map .deploy-acts {
+  grid-column: 3;
   justify-self: end;
+  min-width: 0;
+}
+
+.march-map .deploy-acts .btn {
+  padding: 0 0.55rem;
 }
 
 .march-map {
@@ -3369,14 +3375,15 @@
   min-width: 0;
   display: grid;
   place-items: center;
-  padding: 0.15rem 0.35rem 0.3rem;
+  padding: 0.45rem 0.7rem 0.55rem;
 }
 
 .map-sheet {
   position: relative;
-  height: 100%;
+  height: auto;
   width: auto;
   max-width: 100%;
+  max-height: 100%;
   aspect-ratio: 1792 / 1008;
 }
 
