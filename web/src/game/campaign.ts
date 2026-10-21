@@ -162,8 +162,7 @@ export function reducer(state: Campaign, action: Action): Campaign {
       };
     }
     case "open-deploy": {
-      const picked = state.roster.filter((m) => m.alive && m.hp > 0).slice(0, 4).map((m) => m.id);
-      return { ...state, screen: "deploy", deployId: action.missionId, selectedDeploy: picked, battle: null, aftermath: null };
+      return { ...state, screen: "deploy", deployId: action.missionId, selectedDeploy: [], battle: null, aftermath: null };
     }
     case "toggle-deploy": {
       const has = state.selectedDeploy.includes(action.id);

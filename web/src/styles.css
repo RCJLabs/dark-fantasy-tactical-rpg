@@ -2162,39 +2162,102 @@
   height: 100dvh;
   overflow: hidden;
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  grid-template-rows: minmax(0, 1fr) auto auto;
-  gap: 0.45rem 1rem;
-  padding: 0.7rem 4.6rem 0.7rem 5.5rem;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  grid-template-rows: 2.7rem minmax(0, 1fr);
+  gap: 0;
+  padding: 0;
+  background: #100d0b;
 }
 
-.deploy .mast {
-  grid-column: 1;
-  grid-row: 1;
-  overflow: auto;
-  min-height: 0;
-  align-items: flex-start;
-}
-
-.deploy > .quiet {
-  grid-column: 1;
-  grid-row: 2;
-  margin: 0;
-}
-
-.deploy .roster {
+.deploy-bar {
   grid-column: 2;
-  grid-row: 1 / -1;
-  overflow: auto;
-  min-height: 0;
-  padding-right: 0.2rem;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 11.5rem auto;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.7rem;
+  padding: 0 0.45rem;
+  overflow: hidden;
 }
 
-.deploy > .btn {
-  grid-column: 1;
-  grid-row: 3;
-  justify-self: start;
-  margin: 0;
+.deploy-bar > div:first-child {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.deploy-bar strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deploy-bar span {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deploy-acts {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.deploy-acts .btn {
+  min-height: 0;
+  height: 2rem;
+  padding: 0 0.7rem;
+}
+
+.deploy .board-wrap {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  inset: auto;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  margin: 0 0.25rem 0.2rem 0.1rem;
+  padding: 0;
+  display: block;
+  overflow: hidden;
+}
+
+.deploy .board-frame,
+.deploy .board {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+}
+
+.deploy .cell {
+  aspect-ratio: auto !important;
+  min-height: 0 !important;
+  height: auto;
+}
+
+.deploy .token img {
+  width: 92%;
+  height: 145%;
+  bottom: 0.15rem;
+}
+
+.deploy .mini.is-out {
+  opacity: 0.42;
+}
+
+.cell-spawn {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--color-gold) 70%, transparent);
 }
 
 @media (max-height: 520px) {
@@ -2835,18 +2898,22 @@
   background: #100d0b;
 }
 
-.game[data-screen="battle"] .chrome {
+.game[data-screen="battle"] .chrome,
+.game[data-screen="deploy"] .chrome {
   top: 0.28rem;
   left: calc(3.25rem + (100% - 3.25rem) / 2);
 }
 
 .game[data-screen="battle"] .menu-back,
-.game[data-screen="battle"] .mute {
+.game[data-screen="battle"] .mute,
+.game[data-screen="deploy"] .menu-back,
+.game[data-screen="deploy"] .mute {
   min-height: 2.15rem;
   height: 2.15rem;
 }
 
-.game[data-screen="battle"] .mute {
+.game[data-screen="battle"] .mute,
+.game[data-screen="deploy"] .mute {
   width: 2.15rem;
 }
 
@@ -3083,25 +3150,5 @@
 
 .field-hud .text-btn {
   flex: none;
-}
-
-.deploy {
-  overflow: hidden;
-}
-
-.deploy .roster {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.deploy .merc {
-  flex: 1;
-  min-height: 0;
-}
-
-.deploy .merc .quiet {
-  display: none;
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { BookOpen, Coins, Crosshair, Eye, Flag, Flame, Footprints, GitBranch, Hourglass, Moon, Music, Shield, Skull, Swords, Tent, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
-import { HOT_MEAL, MERC_DEFS, SKILLS, missionById } from "@/game/data";
+import { HOT_MEAL, ENEMY_DEFS, MERC_DEFS, SKILLS, missionById } from "@/game/data";
 import { appliedStats, branchesOf, talentNames } from "@/game/talents";
 import {
   initialCampaign,
@@ -23,7 +23,7 @@ import {
   type Settings,
   type SlotFile,
 } from "@/game/saves";
-import { pickLoadingArt } from "@/game/terrain";
+import { pickLoadingArt, prepareTerrain } from "@/game/terrain";
 import { asset } from "@/game/assets";
 import { playCue, resumeAudio, unlockAudio } from "@/game/audio";
 import type { Campaign, Merc } from "@/game/types";
@@ -690,29 +690,45 @@ function SkillTree({
 
 function Deploy({ state, dispatch, missionId }: { state: Campaign; dispatch: (a: Action) => void; missionId: string }) {
   const mission = missionById(missionId);
-  const first = !state.cleared.includes(mission.id);
   const living = state.roster.filter((m) => m.alive && m.hp > 0);
+  const walking = state.selectedDeploy
+    .map((id) => living.find((m) => m.id === id))
+    .filter((m): m is Merc => Boolean(m));
+  const full = walking.length >= 4;
+  const rows = mission.rows;
+  const height = rows.length;
+  const width = rows[0]?.length ?? 0;
+  const place = mission.ground ?? mission.id;
+  useEffect(() => {
+    void prepareTerrain(place);
+  }, [place]);
+  const placed = new Map<string, Merc>(walking.map((merc, index) => {
+    const spawn = mission.playerSpawns[index] ?? mission.playerSpawns[0];
+    return [`${spawn.x},${spawn.y}`, merc];
+  }));
   return (
-    <section className="deploy">
-      <header className="mast">
+    <section className="deploy" data-place={place} style={{ ["--cols" as string]: String(width), ["--rows" as string]: String(height) }}>
+      <header className="deploy-bar">
         <div>
-          <p className="kicker">{mission.place}</p>
-          <h1 className="display">{mission.name}</h1>
-          <p>{mission.brief}</p>
-          <p className="quiet">
-            {mission.objective === "leader" ? "End the leader and the rest break." : "Leave none of them standing."}{" "}
-            {first ? `${mission.gold} coin, ${mission.renown} renown.` : `${Math.ceil(mission.gold / 2)} coin. No new renown.`}
-          </p>
-          {state.bitter.includes(mission.id) && (
-            <p className="mark-line">This work is worse. You turned the last one down, and another came.</p>
-          )}
+          <strong>{mission.name}</strong>
+          <span>
+            {walking.length === 0
+              ? "Choose who walks. Four at most."
+              : full
+                ? "Four are walking. The rest sit this fight and stay on the roll."
+                : `${walking.length} of 4. Whoever sits out stays on the roll. The road can still scar them.`}
+          </span>
         </div>
-        <button type="button" className="btn btn-ghost" onClick={() => dispatch({ type: "table" })}>
-          Back
-        </button>
+        <div className="deploy-acts">
+          <button type="button" className="btn btn-ghost" onClick={() => dispatch({ type: "table" })}>
+            Back
+          </button>
+          <button type="button" className="btn btn-gold" disabled={walking.length === 0} onClick={() => dispatch({ type: "start-battle" })}>
+            Take the field
+          </button>
+        </div>
       </header>
-      <p className="quiet">Four blades at most. Choose who walks.</p>
-      <ul className="roster">
+      <ul className="roster-mini field-roster">
         {living.map((merc) => {
           const on = state.selectedDeploy.includes(merc.id);
           const frail = isFrail(merc.maxHp);
@@ -720,42 +736,71 @@ function Deploy({ state, dispatch, missionId }: { state: Campaign; dispatch: (a:
             <li key={merc.id}>
               <button
                 type="button"
-                className={`merc merc-btn ${on ? "is-on" : ""} ${woundClass(merc.scars, frail)}`}
+                className={`mini ${on ? "is-on" : "is-out"} ${woundClass(merc.scars, frail)}`}
                 aria-pressed={on}
+                title={on ? `${merc.name} walks` : `${merc.name} sits this fight out`}
                 onClick={() => dispatch({ type: "toggle-deploy", id: merc.id })}
               >
                 <span className={`portrait ${woundClass(merc.scars, frail)}`}>
-                  <img src={asset(`/art/${merc.art}.png`)} alt="" />
+                  <img src={asset(`/art/${merc.art}.png`)} alt={merc.name} />
                   <ScarMarks scars={merc.scars} frail={frail} />
                 </span>
-                <div>
-                  <p className="kicker">{on ? "Walking" : merc.role}</p>
-                  <h3>{merc.name}</h3>
-                  <p className="stats">
-                    {merc.hp}/{appliedStats(merc).maxHp}
-                    <span className="dot" />
-                    {SKILLS[merc.skill].name}
-                    {talentNames(merc.known).length > 0 && (
-                      <>
-                        <span className="dot" />
-                        {talentNames(merc.known).join(", ")}
-                      </>
-                    )}
-                  </p>
-                </div>
               </button>
             </li>
           );
         })}
       </ul>
-      <button
-        type="button"
-        className="btn btn-gold"
-        disabled={state.selectedDeploy.length === 0}
-        onClick={() => dispatch({ type: "start-battle" })}
-      >
-        Take the field ({state.selectedDeploy.length})
-      </button>
+      <div className="board-wrap">
+        <div className="board-frame">
+          <div
+            className="board is-ready"
+            data-place={place}
+            style={{
+              gridTemplateColumns: `repeat(${width}, minmax(0, 1fr))`,
+              gridTemplateRows: `repeat(${height}, minmax(0, 1fr))`,
+            }}
+          >
+            {rows.flatMap((row, y) =>
+              row.split("").map((tile, x) => {
+                const key = `${x},${y}`;
+                const merc = placed.get(key);
+                const spawnIndex = mission.playerSpawns.findIndex((spawn) => spawn.x === x && spawn.y === y);
+                const openSpawn = spawnIndex >= 0 && spawnIndex < 4 && !merc;
+                const cls = [
+                  "cell",
+                  tile === "#" ? "cell-wall" : "",
+                  tile === "r" ? "cell-rubble" : "",
+                  tile === "t" ? "cell-thicket" : "",
+                  tile === "m" ? "cell-mire" : "",
+                  tile === "." ? "cell-open" : "",
+                  openSpawn ? "cell-spawn" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ");
+                return <div key={key} className={cls} data-var={(x + y) % 2} style={{ gridColumn: x + 1, gridRow: y + 1 }} aria-hidden={tile === "#" ? true : undefined} />;
+              }),
+            )}
+            {mission.enemies.map((enemy) => {
+              const def = ENEMY_DEFS[enemy.defId];
+              if (!def) return null;
+              return (
+                <div key={enemy.id} className="token token-enemy" style={{ gridColumn: enemy.x + 1, gridRow: enemy.y + 1 }}>
+                  <img src={asset(`/art/${def.art}.png`)} alt={enemy.name} />
+                </div>
+              );
+            })}
+            {walking.map((merc, index) => {
+              const spawn = mission.playerSpawns[index] ?? mission.playerSpawns[0];
+              return (
+                <div key={merc.id} className="token token-ally is-selected" style={{ gridColumn: spawn.x + 1, gridRow: spawn.y + 1 }}>
+                  <img src={asset(`/art/${merc.art}.png`)} alt="" />
+                  <em className="who">{merc.name.split(" ")[0]}</em>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
