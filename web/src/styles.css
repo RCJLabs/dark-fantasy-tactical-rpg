@@ -2395,3 +2395,552 @@
   background: none;
   font-size: 0.72rem;
 }
+
+/* Full-screen landscape pages. Nothing on these screens scrolls. */
+
+.table {
+  display: block;
+  padding: 0;
+  background: #100d0b;
+}
+
+.hub,
+.sheet {
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  padding: 0.6rem 4.4rem 0.7rem 5.4rem;
+}
+
+.hub {
+  position: relative;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  background:
+    linear-gradient(180deg, rgba(16, 13, 11, 0.55), rgba(16, 13, 11, 0.2) 30%, rgba(16, 13, 11, 0.72)),
+    url("/art/marches.jpg") center / cover no-repeat;
+}
+
+.hub .mast {
+  padding: 0;
+}
+
+.hub-roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 0.55rem;
+}
+
+.hub-roster .merc {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;
+  padding: 0.5rem;
+  background: color-mix(in srgb, var(--color-bg) 72%, transparent);
+}
+
+.hub-roster .portrait {
+  width: auto;
+  height: min(46%, 11rem);
+  flex: 1;
+}
+
+.hub-roster .merc .quiet,
+.hub-roster .stats {
+  display: none;
+}
+
+.hub-roster h3 {
+  margin: 0.25rem 0 0;
+  font-size: 1.15rem;
+}
+
+.hub-dead {
+  position: absolute;
+  left: 5.4rem;
+  bottom: 4.2rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.hub-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.hub-actions .btn {
+  min-height: 3.1rem;
+}
+
+.sheet {
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.45rem;
+  background: var(--color-bg);
+}
+
+.sheet-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.sheet-bar h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.contract-bands {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 0.4rem;
+}
+
+.contract-bands.is-one {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.contract-band {
+  min-height: 0;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.contract-card {
+  flex: 1 1 0;
+  max-width: 20%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--color-bg-2) 88%, transparent);
+}
+
+.contract-card.is-locked {
+  opacity: 0.45;
+}
+
+.contract-card.is-radiant {
+  border-color: var(--color-gold);
+}
+
+.contract-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.05;
+}
+
+.contract-card p {
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.contract-card .contract-acts {
+  margin-top: auto;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.contract-card .btn {
+  min-height: 2.4rem;
+  padding: 0.2rem 0.55rem;
+}
+
+.camp-body {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.4rem;
+}
+
+.camp-fit {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
+  align-content: start;
+}
+
+.camp-fit .btn,
+.camp-fit .text-btn {
+  min-height: 3.4rem;
+}
+
+.chronicle-fit {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4rem;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chronicle-fit p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tree-sheet {
+  padding: 0;
+  background: var(--color-bg);
+}
+
+.tree-panel {
+  width: 100%;
+  height: 100dvh;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0.55rem 0.8rem 0.6rem;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.tree-panel > .quiet {
+  display: none;
+}
+
+.tree-picks {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.tree-picks button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.4rem;
+}
+
+.tree-picks img {
+  width: 1.4rem;
+  height: 1.8rem;
+}
+
+.tree-panel .tree-fit {
+  display: contents;
+}
+
+.tree-board {
+  grid-column: 1;
+  grid-row: 3;
+  align-self: stretch;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.35rem;
+  overflow: hidden;
+}
+
+.tree-col {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto repeat(3, minmax(0, 1fr));
+  gap: 0.2rem;
+  padding: 0.3rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.35rem;
+}
+
+.tree-col.is-on {
+  border-color: var(--color-gold);
+}
+
+.tree-col-name {
+  border: 0;
+  background: transparent;
+  color: var(--color-gold-2);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0;
+  min-height: 1.2rem;
+}
+
+.twig {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.1rem;
+}
+
+.twig > span {
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.twig.is-locked {
+  opacity: 0.38;
+}
+
+.twig-nodes {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.12rem;
+  align-items: center;
+}
+
+.seal-btn {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-height: 2.3rem;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  background: var(--color-bg);
+  color: var(--color-gold-2);
+}
+
+.seal-btn svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.seal-btn small {
+  position: absolute;
+  right: 0;
+  bottom: -0.05rem;
+  font-size: 0.55rem;
+}
+
+.seal-btn.is-owned {
+  background: var(--color-gold);
+  color: var(--color-bg);
+  border-color: var(--color-gold);
+}
+
+.seal-btn.is-open {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 1px var(--color-gold);
+}
+
+.seal-btn.is-focus {
+  outline: 2px solid var(--color-fg);
+}
+
+.tree-fit .node-detail {
+  grid-column: 1;
+  grid-row: 4;
+  margin: 0;
+  align-self: stretch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tree-fit .node-detail p,
+.tree-fit .node-detail h3 {
+  margin: 0;
+}
+
+.tree-fit .node-detail p {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tree-fit .node-detail .btn {
+  margin-top: 0;
+  flex: none;
+}
+
+.battle {
+  display: block;
+  background: #100d0b;
+}
+
+.battle .board-wrap {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  display: block;
+}
+
+.battle .board-frame {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  aspect-ratio: auto;
+}
+
+.field-bar {
+  position: absolute;
+  top: 0;
+  left: 4.6rem;
+  right: 4.2rem;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.35rem 0.2rem;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(16, 13, 11, 0.72), transparent);
+}
+
+.field-bar .btn {
+  pointer-events: auto;
+}
+
+.field-bar strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.field-bar span {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.field-roster {
+  position: absolute;
+  top: 3.6rem;
+  bottom: 3.4rem;
+  left: 0.35rem;
+  z-index: 5;
+  width: 3.3rem;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  overflow: hidden;
+}
+
+.field-roster .mini {
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  padding: 0.1rem;
+  justify-content: center;
+}
+
+.field-roster .mini-meta {
+  display: none;
+}
+
+.field-hud {
+  position: absolute;
+  left: 4.4rem;
+  right: 0.4rem;
+  bottom: 0.35rem;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.8rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+}
+
+.field-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 5.5rem;
+}
+
+.field-who strong {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.field-who em {
+  font-style: normal;
+  color: var(--color-gold-2);
+  font-size: 0.75rem;
+}
+
+.field-hud .btn {
+  min-height: 2.3rem;
+  padding: 0.15rem 0.55rem;
+  flex: none;
+}
+
+.field-hud p {
+  margin: 0;
+  min-width: 0;
+  flex: 1;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.field-hud .text-btn {
+  flex: none;
+}
+
+.deploy {
+  overflow: hidden;
+}
+
+.deploy .roster {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.deploy .merc {
+  flex: 1;
+  min-height: 0;
+}
+
+.deploy .merc .quiet {
+  display: none;
+}
+

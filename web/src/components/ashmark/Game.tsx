@@ -223,6 +223,7 @@ function WarTable({
   const dead = state.roster.filter((m) => !m.alive);
   const [treeId, setTreeId] = useState<string | null>(null);
   const [refuseId, setRefuseId] = useState<string | null>(null);
+  const [sheet, setSheet] = useState<"hub" | "contracts" | "camp">("hub");
   const owned = new Set(state.roster.map((m) => m.defId));
   const offer = nextOffer(state);
   const second = state.cleared.includes("naming");
@@ -239,125 +240,34 @@ function WarTable({
 
   return (
     <section className="table">
-      <header className="mast">
-        <div>
-          <p className="kicker">{renownTitle(state)}</p>
-          <h1 className="display">{state.companyName}</h1>
-          <p className="quiet">Pale Marches of Veyr</p>
-        </div>
-        <div className="purse">
-          <span>
-            <Coins /> {state.gold}
-          </span>
-          <span>
-            <Flag /> {state.renown} renown
-          </span>
-        </div>
-      </header>
-
-      <figure className="march-banner">
-        <img src={asset("/art/marches.jpg")} alt="A soot-stained map of the Pale Marches" />
-        <figcaption>{second ? "The second table" : "Contracts on the war table"}</figcaption>
-      </figure>
-
-      <ol className="doctrine">
-        <li>Move, then strike or use a skill. One action after the step.</li>
-        <li>Watch, and the first foe who steps into reach eats the cut.</li>
-        {second ? (
-          <li>They lay Ashbrand, Hexrot, and Blooddebt. Spend theirs, or wear them.</li>
-        ) : (
-          <li>Sera's strikes lay Ashbrand. Marrow lays Hexrot. Marks wait to be spent.</li>
-        )}
-        <li>A mark spent by someone else cuts deeper. That is how a company gets a name.</li>
-      </ol>
-
-      <div className="table-grid">
-        <div>
-          <h2>{second ? "The second table" : "Contracts"}</h2>
-          {second && <p className="quiet">The name was said. The trees still take renown. The next work points the marks back at you.</p>}
-          <ul className="contracts">
-            {contracts.map((mission, index) => {
-              const prev = index === 0 ? null : contracts[index - 1].id;
-              const done = state.cleared.includes(mission.id);
-              const open = index === 0 || (prev && state.cleared.includes(prev));
-              return (
-                <li key={mission.id} className={open ? "is-open" : "is-locked"}>
-                  <div>
-                    <p className="kicker">{done ? "Kept" : open ? mission.place : "Sealed"}</p>
-                    <h3>{mission.name}</h3>
-                    <p>{open ? mission.brief : "Finish the contract before this one."}</p>
-                    {open && (
-                      <p className="quiet">
-                        {done ? `March again for ${Math.ceil(mission.gold / 2)} coin.` : `${mission.gold} coin · ${mission.renown} renown`}
-                      </p>
-                    )}
-                    {state.bitter.includes(mission.id) && (
-                      <p className="mark-line">Worse. You turned the last work down, and more of them came.</p>
-                    )}
-                    {state.refused.includes(mission.id) && !done && (
-                      <p className="quiet">Turned down once. It is still there if you change your mind.</p>
-                    )}
-                  </div>
-                  {open && (
-                    <div className="contract-acts">
-                      <button type="button" className="btn btn-gold" onClick={() => dispatch({ type: "open-deploy", missionId: mission.id })}>
-                        {done ? "March again" : "Take it"}
-                      </button>
-                      {!done && offer === mission.id && !state.refused.includes(mission.id) && (
-                        <button
-                          type="button"
-                          className="btn btn-blood"
-                          onClick={() => {
-                            if (refuseId === mission.id) {
-                              dispatch({ type: "refuse", missionId: mission.id });
-                              setRefuseId(null);
-                            } else {
-                              setRefuseId(mission.id);
-                            }
-                          }}
-                        >
-                          {refuseId === mission.id ? "Turn it down for certain" : "Turn it down"}
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </li>
-              );
-            })}
+      {sheet === "hub" && (
+        <div className="hub">
+          <header className="mast">
+            <div>
+              <p className="kicker">{renownTitle(state)}</p>
+              <h1 className="display">{state.companyName}</h1>
+              <p className="quiet">Pale Marches of Veyr</p>
+            </div>
+            <div className="purse">
+              <span>
+                <Coins /> {state.gold}
+              </span>
+              <span>
+                <Flag /> {state.renown} renown
+              </span>
+            </div>
+          </header>
+          <ul className="hub-roster">
+            {living.map((merc) => (
+              <MercCard key={merc.id} merc={merc} />
+            ))}
           </ul>
-          {radiant.length > 0 && (
-            <>
-              <h2>Radiant contracts</h2>
-              <p className="quiet">Not men. The marches pay when the thing you kill was never a soldier.</p>
-              <ul className="contracts">
-                {radiant.map((mission) => {
-                  const done = state.cleared.includes(mission.id);
-                  return (
-                    <li key={mission.id} className="is-open is-radiant">
-                      <div>
-                        <p className="kicker">{done ? "Kept" : "Radiant"}</p>
-                        <h3>{mission.name}</h3>
-                        <p>{mission.brief}</p>
-                        <p className="quiet">
-                          {done ? `Hunt again for ${Math.ceil(mission.gold / 2)} coin.` : `${mission.gold} coin · ${mission.renown} renown`}
-                        </p>
-                      </div>
-                      <div className="contract-acts">
-                        <button type="button" className="btn btn-gold" onClick={() => dispatch({ type: "open-deploy", missionId: mission.id })}>
-                          {done ? "Hunt again" : "Take it"}
-                        </button>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </>
-          )}
-        </div>
-
-        <div>
-          <div className="section-head">
-            <h2>Roster</h2>
+          {dead.length > 0 && <p className="hub-dead">In the ground: {dead.map((m) => m.name).join(", ")}</p>}
+          <nav className="hub-actions">
+            <button type="button" className="btn btn-gold" onClick={() => setSheet("contracts")}>
+              <Swords />
+              Contracts
+            </button>
             <button
               type="button"
               className="btn btn-ghost"
@@ -367,78 +277,137 @@ function WarTable({
               <GitBranch />
               Skill trees
             </button>
-          </div>
-          <ul className="roster">
-            {living.map((merc) => (
-              <MercCard key={merc.id} merc={merc} />
-            ))}
-          </ul>
-          {dead.length > 0 && (
-            <>
-              <h2 className="with-icon">
-                <Skull /> In the ground
-              </h2>
-              <ul className="dead-list">
-                {dead.map((m) => (
-                  <li key={m.id}>{m.name}</li>
-                ))}
-              </ul>
-            </>
-          )}
+            <button type="button" className="btn btn-ghost" onClick={() => setSheet("camp")}>
+              <Tent />
+              Camp
+            </button>
+          </nav>
+        </div>
+      )}
 
-          <h2>Camp</h2>
-          <div className="camp-row">
+      {sheet === "contracts" && (
+        <div className="sheet">
+          <header className="sheet-bar">
+            <button type="button" className="btn btn-ghost" onClick={() => setSheet("hub")}>
+              Back
+            </button>
+            <div>
+              <p className="kicker">{second ? "The second table" : "War table"}</p>
+              <h2>Contracts</h2>
+            </div>
+          </header>
+          <div className={radiant.length ? "contract-bands" : "contract-bands is-one"}>
+            <div className="contract-band">
+              {contracts.map((mission, index) => {
+                const prev = index === 0 ? null : contracts[index - 1].id;
+                const done = state.cleared.includes(mission.id);
+                const open = index === 0 || Boolean(prev && state.cleared.includes(prev));
+                return (
+                  <article key={mission.id} className={`contract-card ${open ? "is-open" : "is-locked"}`}>
+                    <p className="kicker">{done ? "Kept" : open ? mission.place : "Sealed"}</p>
+                    <h3>{mission.name}</h3>
+                    <p>{open ? mission.brief : "Finish the contract before this one."}</p>
+                    {open && (
+                      <p className="quiet">
+                        {done ? `March again for ${Math.ceil(mission.gold / 2)} coin.` : `${mission.gold} coin · ${mission.renown} renown`}
+                      </p>
+                    )}
+                    {open && (
+                      <div className="contract-acts">
+                        <button type="button" className="btn btn-gold" onClick={() => dispatch({ type: "open-deploy", missionId: mission.id })}>
+                          {done ? "Again" : "Take it"}
+                        </button>
+                        {!done && offer === mission.id && !state.refused.includes(mission.id) && (
+                          <button
+                            type="button"
+                            className="btn btn-blood"
+                            onClick={() => {
+                              if (refuseId === mission.id) {
+                                dispatch({ type: "refuse", missionId: mission.id });
+                                setRefuseId(null);
+                              } else {
+                                setRefuseId(mission.id);
+                              }
+                            }}
+                          >
+                            {refuseId === mission.id ? "Certain" : "Refuse"}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+            {radiant.length > 0 && (
+              <div className="contract-band">
+                {radiant.map((mission) => {
+                  const done = state.cleared.includes(mission.id);
+                  return (
+                    <article key={mission.id} className="contract-card is-open is-radiant">
+                      <p className="kicker">{done ? "Kept" : "Radiant"}</p>
+                      <h3>{mission.name}</h3>
+                      <p>{mission.brief}</p>
+                      <p className="quiet">
+                        {done ? `Hunt again for ${Math.ceil(mission.gold / 2)} coin.` : `${mission.gold} coin · ${mission.renown} renown`}
+                      </p>
+                      <div className="contract-acts">
+                        <button type="button" className="btn btn-gold" onClick={() => dispatch({ type: "open-deploy", missionId: mission.id })}>
+                          {done ? "Again" : "Take it"}
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {sheet === "camp" && (
+        <div className="sheet">
+          <header className="sheet-bar">
+            <button type="button" className="btn btn-ghost" onClick={() => setSheet("hub")}>
+              Back
+            </button>
+            <div>
+              <p className="kicker">{state.gold} coin</p>
+              <h2>Camp</h2>
+            </div>
+          </header>
+          <div className="camp-body">
+          <div className="camp-fit">
             <button type="button" className="btn btn-ghost" onClick={() => dispatch({ type: "rest", kind: "cold" })}>
               <Moon />
               Cold camp
               <small>Free. Mend a portion.</small>
             </button>
-            <button
-              type="button"
-              className="btn btn-ghost"
-              disabled={state.gold < HOT_MEAL}
-              onClick={() => dispatch({ type: "rest", kind: "hot" })}
-            >
+            <button type="button" className="btn btn-ghost" disabled={state.gold < HOT_MEAL} onClick={() => dispatch({ type: "rest", kind: "hot" })}>
               <Tent />
               Hot meal
               <small>{HOT_MEAL} coin. Full mend.</small>
             </button>
-          </div>
-
-          {hires.length > 0 ? (
-            <>
-              <h2>Hire</h2>
-              <ul className="contracts">
-                {hires.map((def) => (
-                  <li key={def.id} className="is-open">
-                    <div>
-                      <p className="kicker">{def.role} · {def.cost} coin</p>
-                      <h3>{def.name}</h3>
-                      <p>{def.blurb}</p>
-                    </div>
-                    <button
-                      type="button"
-                      className="btn btn-gold"
-                      disabled={state.gold < (def.cost ?? 0)}
-                      onClick={() => dispatch({ type: "recruit", defId: def.id })}
-                    >
-                      Sign them
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : !state.cleared.includes("toll") ? (
-            <p className="quiet">No blade is for sale until the toll is kept.</p>
-          ) : null}
-
-          <div className="camp-row">
+            {hires.map((def) => (
+              <button
+                key={def.id}
+                type="button"
+                className="btn btn-gold"
+                disabled={state.gold < (def.cost ?? 0)}
+                onClick={() => dispatch({ type: "recruit", defId: def.id })}
+              >
+                Sign {def.name}
+                <small>
+                  {def.role} · {def.cost} coin
+                </small>
+              </button>
+            ))}
             <button type="button" className="btn btn-ghost" onClick={() => setChronicle(!chronicle)}>
               <BookOpen />
               Chronicle
             </button>
             <button type="button" className="text-btn" onClick={() => setSure(!sure)}>
-              {sure ? "Disband for certain?" : "Disband the company"}
+              {sure ? "Disband for certain?" : "Disband"}
             </button>
             {sure && (
               <button type="button" className="btn btn-blood" onClick={() => dispatch({ type: "disband" })}>
@@ -447,8 +416,8 @@ function WarTable({
             )}
           </div>
           {chronicle && (
-            <ol className="chronicle">
-              {[...state.chronicle].reverse().map((entry) => (
+            <ol className="chronicle chronicle-fit">
+              {[...state.chronicle].reverse().slice(0, 4).map((entry) => (
                 <li key={entry.id}>
                   <h3>{entry.title}</h3>
                   <p>{entry.body}</p>
@@ -456,8 +425,10 @@ function WarTable({
               ))}
             </ol>
           )}
+          </div>
         </div>
-      </div>
+      )}
+
       {treeId && (
         <TreeSheet
           state={state}
@@ -612,7 +583,6 @@ function SkillTree({
   dispatch: (a: Action) => void;
   canLearn: boolean;
 }) {
-  const skill = SKILLS[merc.skill];
   const shape = branchesOf(merc.defId);
   const known = merc.known ?? [];
   const [branchName, setBranchName] = useState(shape[0]?.branch ?? "");
@@ -623,7 +593,6 @@ function SkillTree({
   }, [merc.id, merc.defId]);
   const branch = shape.find((item) => item.branch === branchName) ?? shape[0];
   const focus = branch?.subs.flatMap((sub) => sub.nodes).find((node) => node.id === focusId) ?? branch?.subs[0]?.nodes[0];
-  const RootIcon = SKILL_ICON[merc.skill] ?? Swords;
   const takenSub = (subName: string) =>
     branch?.subs.some((sub) => sub.sub !== subName && sub.nodes.some((node) => known.includes(node.id))) ?? false;
   const nextOf = (nodes: { id: string; tier: number }[]) => nodes.find((node) => !known.includes(node.id));
@@ -638,99 +607,58 @@ function SkillTree({
       !needsPrev,
   );
   return (
-    <div className="tree" aria-label={`${merc.name} skill tree`}>
-      <div className="tree-figure">
-        <svg className="tree-wood" viewBox="0 0 300 470" preserveAspectRatio="none" aria-hidden>
-          <path className="wood" d="M150 32 V78" />
-          {shape.map((item, index) => {
-            const x = 46 + index * 52;
-            const lit = item.subs.some((sub) => sub.nodes.some((node) => known.includes(node.id)));
-            return <path key={item.branch} className={`wood ${lit ? "is-lit" : ""} ${item.branch === branch?.branch ? "is-chosen" : ""}`} d={`M150 48 Q150 78 ${x} 96`} />;
-          })}
-          {branch &&
-            branch.subs.map((sub, index) => {
-              const locked = takenSub(sub.sub);
-              const side = index - 1;
-              const owned = sub.nodes.filter((node) => known.includes(node.id)).length;
-              const vine = (count: number) => {
-                let d = `M150 128`;
-                for (let step = 0; step < count; step += 1) {
-                  const x = 150 + side * (64 + step * 5);
-                  const y = 176 + step * 56;
-                  const prevY = step === 0 ? 128 : 176 + (step - 1) * 56;
-                  const prevX = step === 0 ? 150 : 150 + side * (64 + (step - 1) * 5);
-                  d += ` Q ${(prevX + x) / 2} ${prevY + 22} ${x} ${y}`;
-                }
-                return d;
-              };
-              return (
-                <g key={sub.sub}>
-                  <path className={`wood ${locked ? "is-locked" : ""}`} d={vine(5)} />
-                  {owned > 0 && <path className="wood is-lit" d={vine(owned)} />}
-                </g>
-              );
-            })}
-        </svg>
-        <div className="tree-root tree-root-float">
-          <span className="seal is-owned">
-            <RootIcon aria-hidden />
-          </span>
-          <strong>{skill.name}</strong>
-        </div>
-        {shape.map((item, index) => {
-          const started = item.subs.some((sub) => sub.nodes.some((node) => known.includes(node.id)));
-          const Icon = MARK_ICON[item.subs[0]?.icon ?? "swords"] ?? Swords;
-          return (
+    <div className="tree tree-fit" aria-label={`${merc.name} skill tree`}>
+      {shape.length === 0 && <p className="quiet">Coin bought the knife. There is no doctrine to walk.</p>}
+      <div className="tree-board">
+        {shape.map((item) => (
+          <section key={item.branch} className={`tree-col ${item.branch === branch?.branch ? "is-on" : ""}`}>
             <button
-              key={item.branch}
               type="button"
-              className={`tree-bud ${item.branch === branch?.branch ? "is-on" : ""} ${started ? "is-started" : ""}`}
-              style={{ left: `${((46 + index * 52) / 300) * 100}%`, top: "20.4%" }}
+              className="tree-col-name"
               aria-pressed={item.branch === branch?.branch}
               onClick={() => {
                 setBranchName(item.branch);
                 setFocusId(null);
               }}
             >
-              <span className="seal">
-                <Icon aria-hidden />
-              </span>
-              <b>{item.branch}</b>
+              {item.branch}
             </button>
-          );
-        })}
-        {branch?.subs.map((sub, index) => {
-          const locked = takenSub(sub.sub);
-          const side = index - 1;
-          const Icon = MARK_ICON[sub.icon] ?? Swords;
-          const next = nextOf(sub.nodes);
-          return sub.nodes.map((node, step) => {
-            const x = 150 + side * (64 + step * 5);
-            const y = 176 + step * 56;
-            const owned = known.includes(node.id);
-            const open = !locked && next?.id === node.id && canLearn && renown >= node.cost;
-            const state = owned ? "is-owned" : locked ? "is-locked" : open ? "is-open" : "is-short";
-            return (
-              <button
-                key={node.id}
-                type="button"
-                className={`tree-spot ${state} ${focus?.id === node.id ? "is-focus" : ""}`}
-                style={{ left: `${(x / 300) * 100}%`, top: `${(y / 470) * 100}%` }}
-                aria-pressed={focus?.id === node.id}
-                aria-label={`${sub.sub}, step ${node.tier}, ${node.name}`}
-                onClick={() => setFocusId(node.id)}
-              >
-                <span className="seal">
-                  <Icon aria-hidden />
-                  <small>{node.tier}</small>
-                </span>
-                {step === 0 && <b className="twig-name">{sub.sub}</b>}
-              </button>
-            );
-          });
-        })}
+            {item.subs.map((sub) => {
+              const locked = item.subs.some((other) => other.sub !== sub.sub && other.nodes.some((node) => known.includes(node.id)));
+              const Icon = MARK_ICON[sub.icon] ?? Swords;
+              const next = nextOf(sub.nodes);
+              return (
+                <div key={sub.sub} className={`twig ${locked ? "is-locked" : ""}`}>
+                  <span>{sub.sub}</span>
+                  <div className="twig-nodes">
+                    {sub.nodes.map((node) => {
+                      const owned = known.includes(node.id);
+                      const open = !locked && next?.id === node.id && canLearn && renown >= node.cost;
+                      const state = owned ? "is-owned" : locked ? "is-locked" : open ? "is-open" : "is-short";
+                      return (
+                        <button
+                          key={node.id}
+                          type="button"
+                          className={`seal-btn ${state} ${focus?.id === node.id ? "is-focus" : ""}`}
+                          aria-pressed={focus?.id === node.id}
+                          aria-label={`${item.branch}, ${sub.sub}, step ${node.tier}, ${node.name}`}
+                          onClick={() => {
+                            setBranchName(item.branch);
+                            setFocusId(node.id);
+                          }}
+                        >
+                          <Icon aria-hidden />
+                          <small>{node.tier}</small>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+        ))}
       </div>
-      {shape.length === 0 && <p className="quiet">Coin bought the knife. There is no doctrine to walk.</p>}
       {focus && (
         <div className="node-detail">
           <p className="kicker">
@@ -749,10 +677,10 @@ function SkillTree({
               : !canLearn
                 ? "Too late"
                 : takenSub(focus.sub)
-                  ? "Another path of this branch"
+                  ? "Another path"
                   : needsPrev
                     ? `Needs ${prevFocus?.name}`
-                    : `Learn · ${focus.cost} renown`}
+                    : `Learn · ${focus.cost}`}
           </button>
         </div>
       )}

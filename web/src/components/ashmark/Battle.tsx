@@ -299,16 +299,13 @@ export function Battle({
     return `${target.name}. ${forecastStrike(battle, sel, target)}`;
   })();
 
-  const waiting = battle.units.some((u) => u.team === "player" && !u.downed && !u.acted);
-
   return (
     <section className="battle" data-place={mission.ground ?? mission.id} style={{ ["--cols" as string]: String(w), ["--rows" as string]: String(h) }}>
       {!fieldOpen && <FieldLoading title={mission.name} place={mission.place} pct={fieldPct} src={loadingArt} />}
-      <header className="hud-top">
+      <header className="field-bar">
         <div>
-          <p className="kicker">{company}</p>
-          <h1 className="display">{mission.name}</h1>
-          <p className="quiet">
+          <strong>{mission.name}</strong>
+          <span>
             Round {battle.round}
             <span className="dot" />
             {battle.objective === "leader" ? "Fell the leader" : "Rout them"}
@@ -320,7 +317,7 @@ export function Battle({
               : acting
                 ? `${acting.name} steps`
                 : "Their turn"}
-          </p>
+          </span>
         </div>
         <button type="button" className="btn btn-gold" disabled={resolving || Boolean(battle.outcome)} onClick={() => commit({ type: "end-phase" })}>
           End phase
@@ -429,17 +426,7 @@ export function Battle({
         </div>
       </div>
 
-      <p className="legend hud-legend">
-          <i className="swatch swatch-forest" /> forest hides you
-          <i className="swatch swatch-rubble" /> rubble covers arrows
-          <i className="swatch swatch-mire" /> mire bogs you
-          <i className="swatch swatch-move" /> move
-          <i className="swatch swatch-threat" /> their reach
-          <i className="swatch swatch-watch" /> Watch
-          <span className="dot" /> Ash, Hex, Debt — the turns left
-        </p>
-
-      <ul className="roster-mini hud-roster">
+      <ul className="roster-mini field-roster">
         {battle.units
           .filter((u) => u.team === "player")
           .map((u) => (
@@ -465,78 +452,51 @@ export function Battle({
           ))}
       </ul>
 
-      <aside className="dock hud-side">
-        {sel ? (
-          <UnitCard
-            unit={sel}
-            ground={battle.map[sel.y]?.[sel.x] ?? "."}
-            forecast={forecast}
-            source={sel.mark ? battle.units.find((u) => u.id === sel.mark?.sourceId)?.name : undefined}
-          />
-        ) : (
-          <p className="quiet">Select one of yours.</p>
-        )}
-        {sel && sel.team === "player" && !sel.downed && !battle.outcome && (
-          <div className="actions">
-            <button
-              type="button"
-              className={`btn ${intent === "skill" ? "btn-gold" : "btn-ghost"}`}
-              disabled={resolving || sel.acted || !skillReady(sel)}
-              onClick={() => {
-                playCue("ui", muted);
-                if (SKILLS[sel.skill].kind === "banner") {
-                  commit({ type: "skill", unitId: sel.id, targetId: sel.id });
-                  return;
-                }
-                setIntent((v) => (v === "skill" ? "none" : "skill"));
-              }}
-            >
-              <Swords />
-              {SKILLS[sel.skill].name}
-            </button>
-            <button
-              type="button"
-              className="btn btn-ghost"
-              disabled={resolving || sel.acted || !sel.moved}
-              onClick={() => commit({ type: "undo", unitId: sel.id })}
-            >
-              <Undo2 />
-              Undo step
-            </button>
-            <button
-              type="button"
-              className="btn btn-ghost"
-              disabled={resolving || sel.acted}
-              onClick={() => commit({ type: "wait", unitId: sel.id })}
-            >
-              <Eye />
-              Watch
-            </button>
-          </div>
-        )}
-        <div className="log" aria-live="polite">
-          {battle.log.slice(-4).map((line, i) => (
-            <p key={`${battle.log.length}-${i}`}>{line}</p>
-          ))}
+      {sel && sel.team === "player" && !sel.downed && !battle.outcome && (
+        <div className="field-hud">
+          <span className="field-who">
+            <strong>{sel.name}</strong>
+            <em>
+              {sel.hp}/{sel.maxHp}
+            </em>
+          </span>
+          <button
+            type="button"
+            className={`btn ${intent === "skill" ? "btn-gold" : "btn-ghost"}`}
+            disabled={resolving || sel.acted || !skillReady(sel)}
+            onClick={() => {
+              playCue("ui", muted);
+              if (SKILLS[sel.skill].kind === "banner") {
+                commit({ type: "skill", unitId: sel.id, targetId: sel.id });
+                return;
+              }
+              setIntent((v) => (v === "skill" ? "none" : "skill"));
+            }}
+          >
+            {SKILLS[sel.skill].name}
+          </button>
+          <button type="button" className="btn btn-ghost" disabled={resolving || sel.acted} onClick={() => commit({ type: "wait", unitId: sel.id })}>
+            Watch
+          </button>
+          <button type="button" className="btn btn-ghost" disabled={resolving || sel.acted || !sel.moved} onClick={() => commit({ type: "undo", unitId: sel.id })}>
+            Undo
+          </button>
+          <p>{forecast}</p>
+          <button
+            type="button"
+            className="text-btn"
+            disabled={Boolean(battle.outcome) || resolving}
+            onClick={() => {
+              const next = structuredClone(battle);
+              next.outcome = "retreat";
+              next.log = [...next.log, "The company withdraws from the contract."];
+              dispatch({ type: "replace-battle", battle: next });
+            }}
+          >
+            Withdraw
+          </button>
         </div>
-        {!waiting && battle.phase === "player" && !battle.outcome && (
-          <p className="quiet">Every blade has acted.</p>
-        )}
-        {resolving && <p className="quiet">The other side takes the field.</p>}
-        <button
-          type="button"
-          className="text-btn"
-          disabled={Boolean(battle.outcome) || resolving}
-          onClick={() => {
-            const next = structuredClone(battle);
-            next.outcome = "retreat";
-            next.log = [...next.log, "The company withdraws from the contract."];
-            dispatch({ type: "replace-battle", battle: next });
-          }}
-        >
-          Withdraw
-        </button>
-      </aside>
+      )}
 
       {battle.outcome && (
         <div className="veil">
