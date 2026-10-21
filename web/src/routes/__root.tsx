@@ -32,6 +32,12 @@ export const Route = createRootRoute({
   component: function Root() {
     useEffect(() => {
       if (!("serviceWorker" in navigator)) return;
+      let reloading = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (reloading) return;
+        reloading = true;
+        window.location.reload();
+      });
       navigator.serviceWorker.register(asset("/sw.js")).catch(() => undefined);
     }, []);
     return (
