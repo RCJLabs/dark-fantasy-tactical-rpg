@@ -24,6 +24,7 @@ These stay. A feature that breaks one of them is the wrong feature.
 - Contracts, in order: the Toll Road, Ash Orchard, the Weeping Chapel, Iron Mile, the Naming.
 - Roster of six: Sera Voss, Marrow, Isk, Sister Halden, Bran the Hound, Quill. Hire, deploy, rest.
 - Prime and detonate. Enemy play. Watch, threat cells, strike motion, health on the token.
+- The grid names who is acting. Ash, Hex, and Debt show the turns left. A pin shows. Gold stripes are the step that eats a Watch. A number on a foe is the strike, before you spend it.
 - Coin, renown, a local save, and an ending when the company is gone or the Naming is spoken.
 - Skill trees behind a button on the roster. Seventy-five steps a blade. A full march only buys about two finished paths. That is the point.
 
@@ -38,14 +39,7 @@ These stay. A feature that breaks one of them is the wrong feature.
 
 ### 1. Read the fight
 
-The trees are deep. A battle still hides which step is live. On the grid, without opening the log:
-
-- Whose activation it is.
-- The mark on a body, and how many turns it has left.
-- A pin, and a Watch that will fire if someone steps into it.
-- What a strike will do before you spend it.
-
-Done when a new player can tell Ashbrand from Hexrot from a held Watch by looking at the tokens.
+Done. On the grid, without the log: who is acting, the mark and the turns left, a pin, the squares where a foe would eat a Watch, and the strike numbers before you spend them.
 
 ### 2. Scars you can see
 
@@ -70,7 +64,7 @@ Done when a company that survived the Naming has somewhere to spend the renown i
 
 ## After the browser march
 
-Only once 1 through 4 play.
+Only once 2 through 4 play. The readable fight already does.
 
 ### 5. Unity plays a strike
 
@@ -97,4 +91,4 @@ Done when a save can go from an unnamed company to the Naming, or to a grave, in
 
 ## How to use this
 
-Work the next open milestone in the browser. When it lands, mark it done in this file in the same commit. Do not open Unity while 1 through 4 are still open.
+Work the next open milestone in the browser. That is scars you can see. Do not open Unity while 2 through 4 are still open.
