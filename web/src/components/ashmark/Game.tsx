@@ -137,19 +137,19 @@ export function Game() {
   return (
     <main className="game">
       {boot === "play" && (
-        <button type="button" className="menu-back" onClick={() => setBoot("menu")}>
-          Menu
-        </button>
-      )}
-      {boot === "play" && (
-        <button
-          type="button"
-          className="mute"
-          aria-label={state.muted ? "Unmute" : "Mute"}
-          onClick={() => applySettings({ ...settings, muted: !state.muted })}
-        >
-          {state.muted ? <VolumeX /> : <Volume2 />}
-        </button>
+        <div className="chrome">
+          <button type="button" className="menu-back" onClick={() => setBoot("menu")}>
+            Menu
+          </button>
+          <button
+            type="button"
+            className="mute"
+            aria-label={state.muted ? "Unmute" : "Mute"}
+            onClick={() => applySettings({ ...settings, muted: !state.muted })}
+          >
+            {state.muted ? <VolumeX /> : <Volume2 />}
+          </button>
+        </div>
       )}
       {boot === "title" && <TitleMenu onEnter={() => setBoot("menu")} />}
       {boot === "menu" && (

@@ -108,11 +108,19 @@
   }
 }
 
-.mute {
+.chrome {
   position: fixed;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 0.4rem;
+  left: 50%;
   z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transform: translateX(-50%);
+}
+
+.mute {
+  position: static;
   display: grid;
   place-items: center;
   width: 44px;
@@ -124,10 +132,7 @@
 }
 
 .menu-back {
-  position: fixed;
-  top: 0.75rem;
-  left: 0.75rem;
-  z-index: 30;
+  position: static;
   min-height: 44px;
   padding: 0 0.9rem;
   border: 1px solid var(--color-line);
@@ -2883,7 +2888,7 @@
   z-index: 2;
   width: auto;
   margin: 0;
-  padding: 3.2rem 0.2rem 0.3rem;
+  padding: 0.45rem 0.2rem 0.3rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
