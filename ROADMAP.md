@@ -178,4 +178,4 @@ Unity may copy the browser, starting with a strike on the Toll Road. Not before 
 
 ## How to use this
 
-The next phase is 1. The field, finished. Do not start phase 2 while a control still covers a unit.
+The next phase is 3. The fight you can read. The field fits, and the faces are theirs. A spectator should be able to name the acting blade, the mark, and the strike without the log.

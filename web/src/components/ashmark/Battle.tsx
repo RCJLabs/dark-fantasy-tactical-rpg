@@ -288,13 +288,18 @@ export function Battle({
     if (!sel || sel.team !== "player" || sel.acted || sel.downed) return null;
     if (intent === "skill") {
       const st = hoverUnit && skills.some((t) => t.id === hoverUnit.id) ? hoverUnit : null;
-      if (!st) return skills.length ? "The numbers are the skill, before you spend it." : "No one in reach of that skill.";
+      if (!st) {
+        if (!skills.length) return "No one in reach of that skill.";
+        if (skills.length === 1) return `${skills[0].name}. ${forecastSkill(battle, sel, skills[0])}`;
+        return "The numbers are the skill, before you spend it.";
+      }
       return `${st.name}. ${forecastSkill(battle, sel, st)}`;
     }
     const target = hoverUnit && strikes.some((t) => t.id === hoverUnit.id) ? hoverUnit : null;
     if (!target) {
-      if (!strikes.length) return sel.moved ? "No strike from here." : "Move, then strike or spend a skill.";
-      return "The numbers are the strike, before you spend it.";
+      if (!strikes.length) return sel.moved ? `${sel.name}. No strike from here.` : `${sel.name}. Move, then strike. The numbers land before you spend them.`;
+      if (strikes.length === 1) return `${strikes[0].name}. ${forecastStrike(battle, sel, strikes[0])}`;
+      return `${sel.name}. The numbers are the strike, before you spend it.`;
     }
     return `${target.name}. ${forecastStrike(battle, sel, target)}`;
   })();
@@ -697,6 +702,7 @@ function Token({
     <div ref={ref} className={cls} style={{ gridColumn: unit.x + 1, gridRow: unit.y + 1, ["--bob" as string]: bob }}>
       {acting && <span className="acting-ring" aria-hidden />}
       <img src={asset(`/art/${unit.art}.png`)} alt={unit.name} />
+      {(selected || acting) && <em className="who">{unit.name.split(" ")[0]}</em>}
       <ScarMarks scars={unit.scars ?? 0} frail={Boolean(unit.frail)} />
       <HealthBar hp={unit.hp} max={unit.maxHp} team={unit.team} />
       <span className="seals">
